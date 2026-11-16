@@ -3,7 +3,7 @@ const { generate } = require('./_gemini');
 const { verify } = require('./_auth');
 
 const KEYS = {
-  pel: { tren: 'Tren layanan harian', komposisi: 'Komposisi jenis layanan', jam: 'Jam sibuk (hari dan jam kedatangan)', gender: 'Jenis kelamin per layanan', sentimen: 'Sentimen konsumen', keperluan: 'Keperluan terbanyak' },
+  pel: { tren: 'Tren layanan harian', komposisi: 'Komposisi jenis layanan', jam: 'Jam sibuk (hari dan jam kedatangan)', gender: 'Jenis kelamin per layanan', sentimen: 'Sentimen konsumen', keperluan: 'Keperluan terbanyak', masalah: 'Topik masalah yang sering muncul dari catatan petugas' },
   edu: { peserta: 'Peserta per kegiatan', demografi: 'Peserta per demografi', bulan: 'Peserta per bulan', lokasi: 'Lokasi dengan peserta terbanyak' }
 };
 
