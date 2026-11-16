@@ -1,0 +1,7 @@
+{
+  "name": "trapesium",
+  "private": true,
+  "type": "commonjs",
+  "scripts": { "build": "node build.mjs" },
+  "dependencies": { "@vercel/blob": "latest", "sharp": "^0.33.5" }
+}

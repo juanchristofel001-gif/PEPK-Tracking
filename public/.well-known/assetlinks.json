@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "app.vercel.pepktracking.twa",
+        "sha256_cert_fingerprints": ["7F:BA:D6:3B:65:28:06:74:F6:A3:8B:40:24:F0:D4:55:11:CF:BD:F9:56:82:69:04:23:F8:F4:90:DD:B4:40:06"]
+      }
+    }]

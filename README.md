@@ -1,11 +1,70 @@
-# Tracker Pelayanan Konsumen – OJK Provinsi Banten
+# Trapesium by OJK
 
-Simple web app to log consumers served (SLIK checks, Pengaduan) and education events observed during the internship at OJK Provinsi Banten, starting 4 November 2026.
+Tracker Pelayanan dan Sistem Informasi Umum. Aplikasi web (PWA) untuk mencatat dan menganalisis pelayanan konsumen serta kegiatan edukasi keuangan di Kantor OJK Provinsi Banten. Status: prototipe.
 
-- Open `index.html` in a browser, or enable GitHub Pages (Settings → Pages → Deploy from branch `main`, folder `/`).
-- Data is stored in the browser (localStorage) of the device you use. Use **Backup (JSON)** regularly and **Pulihkan backup** to restore or move data to another device.
-- **Unduh CSV** exports data with the same columns as the original Excel workbook (Master Data PK / Master Data Edukasi).
+Live: https://pepktracking.vercel.app
 
-Seed data: 23 consumer services and 3 education events from `Dasbor_OJK_New.xlsm`.
+## Isi repo
 
-Author: Juan Christofel Advent Thio
+| Lokasi | Isi |
+|---|---|
+| `public/index.html` | Seluruh aplikasi (HTML, CSS, JS dalam satu file) |
+| `public/sw.js` | Service worker untuk cache dan mode offline. Naikkan versi `CACHE` setiap ada perubahan besar |
+| `public/manifest.webmanifest` | Manifest PWA |
+| `public/.well-known/assetlinks.json` | Verifikasi domain untuk APK Android (TWA) |
+| `icons/*.svg` | Sumber ikon. PNG dibuat otomatis saat build |
+| `api/` | Fungsi server Vercel |
+| `build.mjs` | Skrip build: membuat ikon PNG dari SVG |
+
+### Fungsi server (`api/`)
+
+| File | Fungsi |
+|---|---|
+| `summary.js` | Interpretasi AI untuk "Unduh rangkuman" (Gemini). Hanya menerima angka agregat |
+| `sentiment.js` | Analisis sentimen catatan petugas (Gemini) |
+| `backup.js` | Backup otomatis harian ke Vercel Blob privat, simpan 30 hari |
+| `notes.js` | Catatan harian Logbook di Vercel Blob privat |
+| `sheet.js` | Impor dari Google Sheets |
+| `sync.js`, `seed.js` | Sinkronisasi dan data awal versi lama (sebelum Firebase) |
+| `_auth.js`, `_gemini.js` | Helper: verifikasi login Firebase dan panggilan Gemini |
+
+## Layanan yang dipakai
+
+- **Firebase** (proyek `trapesium-4339d`): login Google dan database Firestore (koleksi `visits` dan `edu`). Konfigurasi web ada di `index.html` (variabel `FBC`); ini bukan rahasia, keamanan diatur oleh Firestore Security Rules.
+- **Vercel**: hosting, fungsi `api/`, dan Blob store privat.
+- **Gemini API** (Google AI Studio, tier gratis): AI untuk rangkuman dan sentimen.
+
+## Environment variables (Vercel → Settings → Environment Variables)
+
+| Nama | Untuk |
+|---|---|
+| `GEMINI_API_KEY` | Key dari aistudio.google.com. Wajib untuk fitur AI |
+| `GEMINI_MODEL` | Opsional, memaksa model tertentu |
+| `BLOB_READ_WRITE_TOKEN` | Otomatis dari Vercel Blob store |
+| `SYNC_PIN` | Kode sinkron versi lama |
+
+Setelah mengubah environment variable, deploy ulang agar terbaca.
+
+## Hak akses
+
+Editor (boleh menambah, mengubah, backup, logbook) ditentukan di dua tempat yang harus sama:
+- `EDITORS` di `public/index.html`
+- `EDITORS` di `api/backup.js` dan `api/notes.js`
+
+Pengguna lain yang login hanya bisa melihat.
+
+## Privasi
+
+Ke Gemini hanya dikirim angka agregat (rangkuman) dan teks catatan petugas (sentimen). Jangan menulis nama, NIK, atau nomor kontak konsumen di kolom Catatan dan Detail. Sebelum aplikasi dipakai lebih luas, tambahkan penyaring data pribadi dan konfirmasi kebijakan data ke pihak OJK.
+
+## APK Android
+
+APK dibuat dengan PWABuilder (Trusted Web Activity), paket `app.vercel.pepktracking.twa`. Isi aplikasi ikut ter-update otomatis dari web. File keystore penandatangan **tidak** disimpan di repo ini; simpan sendiri dengan aman, karena diperlukan untuk setiap pembaruan APK.
+
+## Menjalankan lokal
+
+```
+cd public && python3 -m http.server 8000
+```
+
+Login Google hanya berjalan di domain yang terdaftar di Firebase Authentication. Fitur `api/` butuh `vercel dev`.
