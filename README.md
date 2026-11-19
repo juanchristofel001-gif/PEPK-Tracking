@@ -24,7 +24,7 @@ Live: https://pepktracking.vercel.app
 | `sentiment.js` | Analisis sentimen catatan petugas (Gemini) |
 | `backup.js` | Backup otomatis harian ke Vercel Blob privat, simpan 30 hari |
 | `notes.js` | Catatan harian Logbook di Vercel Blob privat |
-| `sheet.js` | Impor dari Google Sheets |
+| `sheet.js` | Impor dari Google Sheets yang dibagikan publik atau dipublikasikan ke web (cadangan). Link sheet biasa dibaca langsung oleh browser lewat Google Sheets API dengan izin `spreadsheets.readonly` akun yang login, jadi sheet boleh tetap privat |
 | `sync.js`, `seed.js` | Sinkronisasi dan data awal versi lama (sebelum Firebase) |
 | `_auth.js`, `_gemini.js` | Helper: verifikasi login Firebase dan panggilan Gemini |
 
@@ -33,6 +33,10 @@ Live: https://pepktracking.vercel.app
 - **Firebase** (proyek `trapesium-4339d`): login Google dan database Firestore (koleksi `visits` dan `edu`). Konfigurasi web ada di `index.html` (variabel `FBC`); ini bukan rahasia, keamanan diatur oleh Firestore Security Rules.
 - **Vercel**: hosting, fungsi `api/`, dan Blob store privat.
 - **Gemini API** (Google AI Studio, tier gratis): AI untuk rangkuman dan sentimen.
+
+## Google Sheets API
+
+Impor sheet privat butuh **Google Sheets API** aktif di project Google Cloud `trapesium-4339d` (Google Cloud Console → APIs & Services → Library → Google Sheets API → Enable). Selama belum aktif, impor link otomatis memakai cara lama (sheet harus dibagikan "Siapa saja yang memiliki link").
 
 ## Environment variables (Vercel → Settings → Environment Variables)
 

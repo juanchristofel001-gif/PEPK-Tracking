@@ -878,7 +878,7 @@ function viewAdd(){
  h+='<div class="card rise" id="impCard" style="--d:2"><div class="ch"><div class="chd"><span class="ill">'+ill('trend')+'</span><div><h2>Impor dari Google Form atau spreadsheet</h2><div class="sub">Data yang sudah ada otomatis dilewati, jadi aman diimpor berulang</div></div></div>'+
   '<div class="seg" role="group" aria-label="Sumber impor"><button type="button" data-imode="link" class="'+(impMode==='link'?'on':'')+'">Link Sheets</button><button type="button" data-imode="file" class="'+(impMode==='file'?'on':'')+'">Upload file</button></div></div>';
  if(impMode==='link')h+='<div class="irow"><input id="impUrl" type="url" inputmode="url" placeholder="https://docs.google.com/spreadsheets/d/…" aria-label="Link Google Sheets"><button type="button" class="btn" id="impGo"'+(impBusy?' disabled':'')+'>'+ico(I.link)+(impBusy?'Mengambil…':'Ambil data')+'</button></div>'+
-  '<ol class="steps"><li>Buka Google Form, tab <b>Respons</b>, klik <b>Tautkan ke Spreadsheet</b>.</li><li>Di spreadsheet: <b>Bagikan</b>, ubah akses umum ke <b>Siapa saja yang memiliki link</b> (Pelihat).</li><li>Salin link dari address bar, tempel di sini.</li></ol>';
+  '<ol class="steps"><li>Buka Google Form, tab <b>Respons</b>, klik <b>Tautkan ke Spreadsheet</b>.</li><li>Salin link spreadsheet dari address bar, tempel di sini, lalu klik <b>Ambil data</b>.</li><li>Pertama kali, Google meminta izin <b>melihat spreadsheet Google Sheets</b>: pilih akunmu dan izinkan.</li></ol><div class="hint">Spreadsheet <b>tidak perlu dibagikan ke publik</b>. Cukup akun Google yang sedang login punya akses ke sheet itu. Isinya dibaca langsung dari Google oleh browser ini, kolom data pribadi dibuang, dan izinnya hanya untuk membaca.</div>';
  else h+='<label class="drop" id="impDrop">'+ico(I.sheet,1.8)+'<span>Pilih atau seret file ke sini</span><span class="mu">CSV atau Excel (.xlsx), misalnya hasil unduhan respons Google Form</span><input type="file" id="impFile" accept=".csv,.tsv,.txt,.xlsx,.xls,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"></label>';
  if(impErr)h+='<div class="err" style="margin:14px 0 0">'+esc(impErr)+'</div>';
  if(IMP)h+=impPreview();
@@ -962,7 +962,36 @@ function impLink(url){
  url=String(url||'').trim();if(!url){impErr='Tempel link Google Sheets dulu.';render();return}
  if(/forms\.gle|docs\.google\.com\/forms/.test(url)){impErr='Itu link Google Form. Buka tab Respons di Form, klik "Tautkan ke Spreadsheet", lalu tempel link spreadsheet-nya.';IMP=null;render();return}
  if(!/docs\.google\.com\/spreadsheets\//.test(url)){impErr='Link harus dari docs.google.com/spreadsheets.';IMP=null;render();return}
- impFrom(user.getIdToken().then(function(tk){return fetch('/api/sheet?url='+encodeURIComponent(url),{headers:{Authorization:'Bearer '+tk}})}).then(function(r){return r.text().then(function(t){if(!r.ok){var m='';try{m=JSON.parse(t).error}catch(e){}throw new Error(m||'Gagal mengambil sheet ('+r.status+').')}return parseCSV(t)})}),'Google Sheets')}
+ var id=(url.match(/\/spreadsheets\/d\/([\w-]{20,})/)||[])[1],gid=(url.match(/[#&?]gid=(\d+)/)||[])[1];
+ // Link biasa: baca langsung dari Google dengan izin akun yang login, jadi sheet boleh tetap privat.
+ // Isi sheet berjalan browser <-> Google saja, tidak lewat server Trapesium. Link "Publikasikan ke web" (/d/e/) tetap lewat server.
+ if(id&&id!=='e'){impFrom(sheetToken().then(function(tk){return sheetPrivat(id,gid,tk)}).catch(function(e){
+   if(e&&e.disabled)return sheetPublik(url).catch(function(){throw new Error('Fitur baca sheet privat belum aktif: Google Sheets API belum dinyalakan di project Firebase (trapesium-4339d). Sementara itu, pakai mode Upload file.')});
+   throw e}),'Google Sheets');return}
+ impFrom(sheetPublik(url),'Google Sheets')}
+function sheetPublik(url){return user.getIdToken().then(function(tk){return fetch('/api/sheet?url='+encodeURIComponent(url),{headers:{Authorization:'Bearer '+tk}})}).then(function(r){return r.text().then(function(t){if(!r.ok){var m='';try{m=JSON.parse(t).error}catch(e){}throw new Error(m||'Gagal mengambil sheet ('+r.status+').')}return parseCSV(t)})})}
+// Token akses Google khusus baca Sheets (spreadsheets.readonly), diminta lewat popup saat pertama kali impor; berlaku ~1 jam, disimpan di memori saja.
+var gTok=null,gTokAt=0;
+function sheetToken(){
+ if(gTok&&Date.now()-gTokAt<50*60e3)return Promise.resolve(gTok);
+ var U=fb.U,P=new U.GoogleAuthProvider();P.addScope('https://www.googleapis.com/auth/spreadsheets.readonly');P.setCustomParameters({login_hint:user.email||''});
+ return U.reauthenticateWithPopup(user,P).then(function(r){var c=U.GoogleAuthProvider.credentialFromResult(r);if(!c||!c.accessToken)throw new Error('Google tidak memberikan izin baca Sheets. Coba lagi.');gTok=c.accessToken;gTokAt=Date.now();return gTok},function(e){var c=(e&&e.code)||'';
+  if(/popup-closed|cancelled-popup/.test(c))throw new Error('Izin dibatalkan. Klik Ambil data lagi, lalu pilih akun dan centang izin melihat Google Sheets.');
+  if(/popup-blocked/.test(c))throw new Error('Popup izin Google diblokir browser. Izinkan popup untuk situs ini, lalu coba lagi.');
+  if(/user-mismatch/.test(c))throw new Error('Pilih akun Google yang sama dengan yang sedang login ('+(user.email||'')+').');
+  throw new Error(fbMsg(e))})}
+function sheetPrivat(id,gid,tk){
+ var H={headers:{Authorization:'Bearer '+tk}},base='https://sheets.googleapis.com/v4/spreadsheets/'+id;
+ function cek(r){if(r.ok)return r.json();return r.json().catch(function(){return{}}).then(function(j){var er=j.error||{},msg=String(er.message||''),why=JSON.stringify(er.details||'');
+  if(r.status===401){gTok=null;throw new Error('Izin Google sudah kedaluwarsa. Klik Ambil data lagi.')}
+  if(r.status===403&&/SERVICE_DISABLED|has not been used|is disabled/i.test(msg+why)){var x=new Error('disabled');x.disabled=true;throw x}
+  if(r.status===403||r.status===404)throw new Error('Akun '+(user.email||'ini')+' tidak punya akses ke spreadsheet itu. Minta pemilik sheet membagikannya ke email kamu (cukup Pelihat), tidak perlu dibuka untuk publik.');
+  throw new Error('Gagal membaca Google Sheets ('+r.status+'). '+msg)})}
+ return fetch(base+'?fields=sheets.properties(sheetId,title)',H).then(cek).then(function(m){
+  var sh=(m.sheets||[]).map(function(x){return x.properties}),t=(gid!=null&&sh.filter(function(x){return String(x.sheetId)===String(gid)})[0])||sh[0];
+  if(!t)throw new Error('Spreadsheet itu kosong.');
+  return fetch(base+'/values/'+encodeURIComponent("'"+t.title.replace(/'/g,"''")+"'")+'?valueRenderOption=FORMATTED_VALUE&majorDimension=ROWS',H).then(cek)})
+ .then(function(v){return (v.values||[]).filter(function(r){return r.some(function(c){return String(c).trim()})})})}
 function bindImport(){
  document.querySelectorAll('[data-imode]').forEach(function(b){b.onclick=function(){impMode=b.dataset.imode;impErr='';render()}});
  var go=document.getElementById('impGo'),u=document.getElementById('impUrl');
