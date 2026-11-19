@@ -1,0 +1,47 @@
+rules_version = '2';
+// Aturan keamanan Firestore Trapesium. Tempel isi file ini di Firebase Console → Firestore Database → Rules → Publish.
+// - Pemilik (email di bawah) selalu editor dan satu-satunya yang bisa mengatur daftar akses.
+// - Akun lain hanya bisa masuk kalau emailnya ada di koleksi "akses" (diatur dari kartu "Akses akun" di Trapesium).
+// - Semua yang tidak disebut di sini ditolak.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function masuk() {
+      return request.auth != null && request.auth.token.email_verified == true;
+    }
+    function email() {
+      return request.auth.token.email.lower();
+    }
+    function pemilik() {
+      return masuk() && email() == 'juanchristofel001@gmail.com';
+    }
+    function dokAkses() {
+      return /databases/$(database)/documents/akses/$(email());
+    }
+    function terdaftar() {
+      return pemilik() || (masuk() && exists(dokAkses()));
+    }
+    function editor() {
+      return pemilik() || (masuk() && exists(dokAkses()) && get(dokAkses()).data.peran == 'editor');
+    }
+
+    match /visits/{id} {
+      allow read: if terdaftar();
+      allow write: if editor();
+    }
+    match /edu/{id} {
+      allow read: if terdaftar();
+      allow write: if editor();
+    }
+    match /akses/{em} {
+      // Setiap akun hanya boleh membaca status aksesnya sendiri; pemilik boleh melihat dan mengubah semuanya.
+      allow read: if pemilik() || (masuk() && em == email());
+      allow create, update: if pemilik()
+        && request.resource.data.peran in ['pembaca', 'editor']
+        && em == em.lower();
+      allow delete: if pemilik();
+    }
+    match /{dokumen=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -15,6 +15,7 @@ Live: https://pepktracking.vercel.app
 | `icons/*.svg` | Sumber ikon. PNG dibuat otomatis saat build |
 | `api/` | Fungsi server Vercel |
 | `build.mjs` | Skrip build: membuat ikon PNG dari SVG |
+| `firestore.rules` | Aturan keamanan Firestore (siapa boleh membaca/menulis). Disalin manual ke Firebase Console |
 
 ### Fungsi server (`api/`)
 
@@ -51,11 +52,13 @@ Setelah mengubah environment variable, deploy ulang agar terbaca.
 
 ## Hak akses
 
-Editor (boleh menambah, mengubah, backup, logbook) ditentukan di dua tempat yang harus sama:
-- `EDITORS` di `public/index.html`
-- `EDITORS` di `api/backup.js` dan `api/notes.js`
+Hanya akun yang terdaftar yang bisa membuka Trapesium:
+- **Pemilik**: email di `EDITORS` (`public/index.html`, `api/backup.js`, `api/notes.js`, `api/sheet.js`) dan di `firestore.rules`. Selalu editor, dan satu-satunya yang bisa mengatur daftar akses.
+- **Akun lain**: didaftarkan pemilik lewat kartu **Akses akun** di tab Data (koleksi Firestore `akses`, satu dokumen per email, peran `pembaca` atau `editor`). Akun yang tidak terdaftar langsung ditolak setelah login.
 
-Pengguna lain yang login hanya bisa melihat.
+Kunci sebenarnya ada di **Firestore Security Rules** (`firestore.rules`). Setiap kali file itu berubah, salin isinya ke Firebase Console → Firestore Database → Rules → Publish. Tanpa langkah itu, penolakan di aplikasi hanya tampilan.
+
+Backup dan Logbook (fungsi `api/`) hanya untuk pemilik.
 
 ## Privasi
 

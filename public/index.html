@@ -242,6 +242,7 @@ td.nt{min-width:180px;max-width:320px}
 .isum span{background:var(--field);border-radius:10px;padding:6px 11px;font-size:13px;font-weight:600}
 .isum span.g{background:#eaf5ee;color:#215c3a}
 .map{font-size:12px;color:var(--mute);margin-bottom:10px}
+.aksf select{width:auto;flex:none}.aksl{margin-top:12px;border-top:1px solid var(--line)}.aksr{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}.aksr .btn{width:auto!important;padding:6px 12px;font-size:12px}@media(max-width:600px){.aksf{flex-wrap:wrap}.aksr{grid-template-columns:1fr auto}.aksr .btn{grid-column:1/-1;justify-self:start}}
 .map.pii{display:flex;gap:8px;align-items:flex-start;background:#eef7ef;color:#2c5a33;border-radius:10px;padding:9px 12px}.map.pii svg{width:16px;height:16px;flex:none;margin-top:1px}
 .map b{color:var(--ink);font-weight:600}
 
@@ -674,7 +675,7 @@ function renderApp(){
  main.innerHTML='<div class="page">'+pageHead()+(tab==='log'?viewLog():space==='edu'?(tab==='home'?eduHome():tab==='add'?eduAdd():tab==='stats'?eduStats():eduData()):(tab==='home'?viewHome():tab==='add'?viewAdd():tab==='stats'?viewStats():viewData()))+'</div>';
  if(urlVal!=null&&document.getElementById('impUrl'))document.getElementById('impUrl').value=urlVal;
  if(entering){main.classList.remove('enter');void main.offsetWidth;main.classList.add('enter');countUp(main);clearTimeout(enterTm);enterTm=setTimeout(function(){main.classList.remove('enter')},2400);window.scrollTo(0,0)}
- bind();bindIO();bindAcct();bindImport();bindBk();bindBuddy();bindLog();bindTopics();
+ bind();bindIO();bindAcct();bindAkses();bindImport();bindBk();bindBuddy();bindLog();bindTopics();
  if(focusId&&document.getElementById(focusId)){var el=document.getElementById(focusId);el.focus();if(keep[focusId]!=null&&el.setSelectionRange)try{el.setSelectionRange(keep[focusId],keep[focusId])}catch(e){}}
 }
 function countUp(root){
@@ -1028,7 +1029,21 @@ function viewData(){
 function acctCard(){
  return '<div class="card rise" style="--d:1"><div class="acct"><span class="av">'+initial()+'</span><div class="t"><b>'+esc(user.displayName||user.email)+'</b><span>'+esc(user.email)+', '+(role==='editor'?'editor (bisa menambah dan mengubah data)':'pembaca (hanya bisa melihat)')+'. '+(cloudOk?'Data tersimpan di cloud.':'Offline, perubahan tersimpan saat online.')+'</span></div>'+
   '<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn plain" type="button" id="dlCsv">Unduh CSV</button>'+
-  '<button class="btn soft" type="button" id="logoutB">Keluar</button></div></div></div>'+(role==='editor'?bkCard():'')}
+  '<button class="btn soft" type="button" id="logoutB">Keluar</button></div></div></div>'+(AKS?aksCard():'')+(role==='editor'?bkCard():'')}
+function aksCard(){
+ var h='<div class="card rise" style="--d:1"><div class="ch"><div class="chd"><span class="ill">'+ico(I.shield,1.8)+'</span><div><h2>Akses akun</h2><div class="sub">Hanya email di daftar ini yang bisa membuka Trapesium. Orang lain yang login akan ditolak.</div></div></div></div>'+
+  '<form class="irow aksf" id="aksF"><input name="em" type="email" required placeholder="email@gmail.com" aria-label="Email Google"><select name="peran" aria-label="Peran"><option value="pembaca">Pembaca (hanya melihat)</option><option value="editor">Editor (menambah dan mengubah)</option></select><button class="btn" type="submit">Beri akses</button></form>'+
+  (aksMsg?'<div class="hint">'+esc(aksMsg)+'</div>':'')+
+  '<div class="aksl"><div class="aksr"><span><b>'+esc(EDITORS[0])+'</b></span><span class="mu">Pemilik</span><span></span></div>';
+ AKS.forEach(function(a){h+='<div class="aksr"><span><b>'+esc(a.email)+'</b>'+(a.oleh?'<small class="mu"> · ditambahkan '+esc(a.oleh)+'</small>':'')+'</span><span class="mu">'+(a.peran==='editor'?'Editor':'Pembaca')+'</span><button type="button" class="btn plain" data-aksdel="'+esc(a.email)+'">Cabut</button></div>'});
+ return h+'</div></div>'}
+function bindAkses(){
+ var f=document.getElementById('aksF');if(f)f.onsubmit=function(ev){ev.preventDefault();var em=String(f.em.value||'').trim().toLowerCase(),p=f.peran.value;
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){aksMsg='Email tidak valid.';render();return}
+  if(EDITORS.indexOf(em)>=0){aksMsg='Itu email pemilik, sudah punya akses.';render();return}
+  fb.F.setDoc(fb.F.doc(fb.db,'akses',em),{peran:p,oleh:user.email,dibuat:new Date().toISOString()}).then(function(){aksMsg=em+' sekarang bisa masuk sebagai '+(p==='editor'?'editor':'pembaca')+'.';render()},function(e){aksMsg=fbMsg(e);render()})};
+ document.querySelectorAll('[data-aksdel]').forEach(function(b){b.onclick=function(){var em=b.dataset.aksdel;if(!confirm('Cabut akses '+em+'? Akun itu tidak bisa membuka Trapesium lagi.'))return;
+  fb.F.deleteDoc(fb.F.doc(fb.db,'akses',em)).then(function(){aksMsg='Akses '+em+' dicabut.';render()},function(e){aksMsg=fbMsg(e);render()})}})}
 
 /* ---------- edukasi ---------- */
 
@@ -1535,13 +1550,27 @@ function fbStart(){
   try{db=Fs.initializeFirestore(app,{localCache:Fs.persistentLocalCache({tabManager:Fs.persistentMultipleTabManager()})})}catch(e){db=Fs.getFirestore(app)}
   fb={U:U,F:Fs,auth:U.getAuth(app),db:db};
   U.getRedirectResult(fb.auth).catch(function(e){fsErr=fbMsg(e);render()});
+  // Hanya email yang terdaftar (pemilik di EDITORS, atau dokumen di koleksi "akses") yang boleh masuk.
+  // Kunci sebenarnya ada di Firestore Security Rules (firestore.rules); pengecekan di sini untuk tampilan.
   U.onAuthStateChanged(fb.auth,function(u){
-   authReady=true;stopSubs();user=u;fsErr='';
-   if(u){role=EDITORS.indexOf(String(u.email||'').toLowerCase())>=0?'editor':'viewer';art=role==='editor'?{offline:true}:false;startSubs()}
-   else{role=null;art=false;S.visits=[];S.edu=[];snapV=snapE=null}
-   render()})
+   authReady=true;stopSubs();
+   if(!u){user=null;role=null;art=false;AKS=null;S.visits=[];S.edu=[];snapV=snapE=null;render();return}
+   var em=String(u.email||'').toLowerCase(),pk=KEY+'.peran.'+em;
+   if(EDITORS.indexOf(em)>=0&&u.emailVerified)return masukSebagai(u,'editor');
+   user=null;cekAkses=true;render();
+   Fs.getDoc(Fs.doc(db,'akses',em)).then(function(d){
+    var p=d.exists()?d.data().peran:'';cekAkses=false;
+    if(p==='editor'||p==='pembaca'){lsSet(pk,p);masukSebagai(u,p==='editor'?'editor':'viewer')}else tolak(em)
+   },function(e){cekAkses=false;var p=lsGet(pk);
+    if(/unavailable|offline/i.test((e&&e.code)||'')&&(p==='editor'||p==='pembaca'))masukSebagai(u,p==='editor'?'editor':'viewer');else tolak(em)})
+  })
  }).catch(function(){authReady=true;fsErr='Layanan login gagal dimuat. Periksa koneksi internet, lalu muat ulang halaman.';render()});
 }
+var cekAkses=false,AKS=null,aksMsg='';
+function masukSebagai(u,r){user=u;role=r;fsErr='';art=r==='editor'?{offline:true}:false;startSubs();
+ if(EDITORS.indexOf(String(u.email||'').toLowerCase())>=0)unsub.push(fb.F.onSnapshot(fb.F.collection(fb.db,'akses'),function(q){AKS=[];q.forEach(function(d){var x=d.data();x.email=d.id;AKS.push(x)});AKS.sort(function(a,b){return a.email<b.email?-1:1});if(!busy())render()},function(){AKS=[]}));
+ render()}
+function tolak(em){lsSet(KEY,null);S.visits=[];S.edu=[];fsErr='Akun '+em+' belum diberi akses ke Trapesium. Minta admin menambahkan email ini, lalu masuk lagi.';fb.U.signOut(fb.auth).then(render,render)}
 function stopSubs(){unsub.forEach(function(f){try{f()}catch(e){}});unsub=[];migChecked=false;cloudOk=false}
 function startSubs(){
  var Fs=fb.F,got={visits:0,edu:0};
@@ -1599,7 +1628,7 @@ function render(){
  var r=document.getElementById('root');
  r.innerHTML='<div class="login"><div class="bg" aria-hidden="true">'+TRAP.replace('<svg','<svg style="width:260px;left:-70px;top:12%;animation:float 12s ease-in-out infinite"')+TRAP.replace('<svg','<svg style="width:140px;right:-30px;bottom:14%;animation:float 10s ease-in-out -4s infinite"')+TRAP.replace('<svg','<svg style="width:70px;right:22%;top:8%;animation:float 9s ease-in-out -2s infinite"')+'</div>'+
   '<div class="lcard"><div class="logo img"><img src="/icon-192.png" alt=""></div><h1>Trapesium <span>by OJK</span></h1><p>Tracker Pelayanan dan Sistem Informasi Umum</p>'+
-  (authReady&&fb?'<button class="btn" type="button" id="loginB">'+GLOGO+'Masuk dengan Google</button><div class="hint">Gunakan akun Google yang sudah diberi akses.</div>':'<p class="mu" style="margin:0">'+(fsErr?'':'Memuat…')+'</p>')+
+  (cekAkses?'<p class="mu" style="margin:0">Memeriksa akses akun…</p>':authReady&&fb?'<button class="btn" type="button" id="loginB">'+GLOGO+'Masuk dengan Google</button><div class="hint">Gunakan akun Google yang sudah diberi akses.</div>':'<p class="mu" style="margin:0">'+(fsErr?'':'Memuat…')+'</p>')+
   (fsErr?'<div class="err" style="margin:16px 0 0">'+esc(fsErr)+'</div>':'')+'</div></div>';
  bindAcct();
 }
