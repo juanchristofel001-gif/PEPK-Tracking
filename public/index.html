@@ -242,6 +242,7 @@ td.nt{min-width:180px;max-width:320px}
 .isum span{background:var(--field);border-radius:10px;padding:6px 11px;font-size:13px;font-weight:600}
 .isum span.g{background:#eaf5ee;color:#215c3a}
 .map{font-size:12px;color:var(--mute);margin-bottom:10px}
+.map.pii{display:flex;gap:8px;align-items:flex-start;background:#eef7ef;color:#2c5a33;border-radius:10px;padding:9px 12px}.map.pii svg{width:16px;height:16px;flex:none;margin-top:1px}
 .map b{color:var(--ink);font-weight:600}
 
 /* ---------- edukasi ---------- */
@@ -597,7 +598,8 @@ var I={
  up:'<path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/>',
  link:'<path d="M10 14a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1 1"/><path d="M14 10a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1-1"/>',
  dl:'<path d="M12 4v11M7 10l5 5 5-5"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/>',
- sheet:'<rect x="4" y="3" width="16" height="18" rx="2.5"/><path d="M4 9h16M4 15h16M10 9v12"/>'
+ sheet:'<rect x="4" y="3" width="16" height="18" rx="2.5"/><path d="M4 9h16M4 15h16M10 9v12"/>',
+ shield:'<path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/>'
 };
 
 
@@ -904,33 +906,47 @@ function mkDate(p,order){if(!p)return '';var d=p.iso||order==='dm'?p.a:p.b,mo=p.
 function ptime(s){var m=String(s||'').match(/(\d{1,2})[:.](\d{2})(?:[:.]\d{2})?\s*(am|pm)?/i);if(!m)return '';var h=+m[1],mi=+m[2];if(m[3]){var pm=/pm/i.test(m[3]);if(pm&&h<12)h+=12;if(!pm&&h===12)h=0}if(h>23||mi>59)return '';return pad(h)+':'+pad(mi)}
 function pgender(s){var v=String(s||'').trim().toLowerCase();if(/perempuan|wanita|female|cewek/.test(v)||v==='p'||v==='f')return 'Female';if(/laki|pria|male|cowok/.test(v)||v==='l'||v==='m')return 'Male';return ''}
 function ptype(s,detail){var v=String(s||'').toLowerCase(),d=String(detail||'').toLowerCase();if(/slik/.test(v))return 'SLIK';if(/aduan|complain|komplain/.test(v))return 'Pengaduan';if(v.trim())return 'Lainnya';if(/slik/.test(d))return 'SLIK';if(/aduan/.test(d))return 'Pengaduan';return 'Lainnya'}
+// Kolom data pribadi tidak pernah dipetakan/diimpor, walau judulnya mirip kolom lain (mis. "Tanggal lahir", "Detail alamat").
+var PII_HEAD=/(^|[^a-z])(nama|name|nik|ktp|no\.? ?kk|kartu keluarga|npwp|hp|handphone|telepon|telp|phone|ponsel|wa|whatsapp|e-?mail|surel|alamat|address|domisili|rekening|no\.? ?rek|lahir|ttl|usia|umur|tanda tangan|ttd|instagram|ig)([^a-z]|$)/;
+// Samarkan data pribadi yang terselip di teks bebas (Detail, Catatan) sebelum disimpan.
+function samarkan(t,hit){t=String(t||'');
+ t=t.replace(/[\w.+-]+@[\w-]+(\.[\w-]+)+/g,function(){hit.email++;return '[email]'});
+ t=t.replace(/\d{2}\.\d{3}\.\d{3}\.\d-\d{3}\.\d{3}/g,function(){hit.nomor++;return '[NPWP]'});
+ t=t.replace(/(^|[^\d])(\d{16})(?!\d)/g,function(m,a){hit.nik++;return a+'[NIK]'});
+ t=t.replace(/(^|[^\d+])((?:\+62|62|0)\s?8[\d\s.-]{7,14}\d)(?!\d)/g,function(m,a,n){if(n.replace(/\D/g,'').length<10)return m;hit.hp++;return a+'[no. HP]'});
+ t=t.replace(/(rp\.?\s*)?(\d[\d.\s-]{8,}\d)/gi,function(m,rp,n){if(rp||n.replace(/\D/g,'').length<10)return m;hit.nomor++;return '[nomor]'});
+ return t}
 function buildImport(rows,src){
  var hi=-1;for(var i=0;i<Math.min(rows.length,10);i++){if(rows[i].filter(function(c){return String(c).trim()}).length>=2){hi=i;break}}
  if(hi<0)throw new Error('File kosong atau tidak punya baris judul kolom.');
  var head=rows[hi].map(function(c){return String(c).trim()}),map={},used={};
- head.forEach(function(hd,ci){var l=hd.toLowerCase();for(var k=0;k<COLP.length;k++){var key=COLP[k][0];if(!used[key]&&COLP[k][1].test(l)){map[key]=ci;used[key]=hd;break}}});
+ var skip=[];
+ head.forEach(function(hd,ci){var l=hd.toLowerCase();if(!hd)return;if(PII_HEAD.test(l)){skip.push({h:hd,p:1});return}for(var k=0;k<COLP.length;k++){var key=COLP[k][0];if(!used[key]&&COLP[k][1].test(l)){map[key]=ci;used[key]=hd;break}}if(Object.keys(map).every(function(k){return map[k]!==ci}))skip.push({h:hd})});
  if(map.date==null&&map.ts==null)throw new Error('Kolom tanggal tidak ditemukan. Pastikan ada kolom "Tanggal" atau "Timestamp".');
  var body=rows.slice(hi+1),dc=map.date!=null?map.date:map.ts,order='dm',sawA=false,sawB=false;
  body.forEach(function(r){var p=dparts(r[dc]);if(p&&!p.iso){if(p.a>12)sawA=true;if(p.b>12)sawB=true}});
  if(sawB&&!sawA)order='md';
  var have={},seen={};S.visits.forEach(function(v){var k=k5(v);have[k]=(have[k]||0)+1});
- var out=[],dup=0,bad=0;
+ var out=[],dup=0,bad=0,hit={nik:0,hp:0,email:0,nomor:0};
  body.forEach(function(r){
   var g=function(k){return map[k]!=null?String(r[map[k]]==null?'':r[map[k]]).trim():''};
   var dp=dparts(g('date')||g('ts')),date=mkDate(dp,order);
   var time=ptime(g('time'))||(map.time==null&&map.ts!=null?ptime(dparts(g('ts'))?dparts(g('ts')).rest:g('ts')):'');
-  var gender=pgender(g('gender')),detail=g('detail'),type=ptype(g('type'),detail);
+  var gender=pgender(g('gender')),detail=samarkan(g('detail'),hit),type=ptype(g('type'),detail);
   if(!date||!time||!gender){bad++;return}
   if(!detail)detail=type==='SLIK'?'pengecekan SLIK':type;
   var x={date:date,time:time,gender:gender,type:type,detail:detail},o=ptime(g('out'));
   if(o&&o>time){x.out=o}else estOut(x);
-  var note=g('note');if(note){x.note=note;x.sent=lexSent(note);x.sentBy='kata'}
+  var note=samarkan(g('note'),hit);if(note){x.note=note;x.sent=lexSent(note);x.sentBy='kata'}
   var k=k5(x);seen[k]=(seen[k]||0)+1;if(seen[k]<=(have[k]||0)){dup++;return}
   out.push(x)});
- return{rows:out,dup:dup,bad:bad,map:used,src:src}}
+ return{rows:out,dup:dup,bad:bad,map:used,src:src,skip:skip,hit:hit}}
 function impPreview(){
  var x=IMP,h='<div class="isum"><span class="g">'+x.rows.length+' baru</span><span>'+x.dup+' sudah ada</span>'+(x.bad?'<span>'+x.bad+' dilewati (tanggal, jam, atau jenis kelamin kosong)</span>':'')+'</div>';
  h+='<div class="map">Dari <b>'+esc(x.src)+'</b>. Kolom terbaca: '+Object.keys(x.map).map(function(k){return CLAB[k]+' ← <b>'+esc(x.map[k])+'</b>'}).join(', ')+'</div>';
+ var pr=x.skip.filter(function(c){return c.p}),lain=x.skip.filter(function(c){return !c.p}),nh=x.hit.nik+x.hit.hp+x.hit.email+x.hit.nomor;
+ if(pr.length||lain.length)h+='<div class="map pii">'+ico(I.shield)+'<span><b>Tidak diimpor:</b> '+(pr.length?pr.map(function(c){return '<b>'+esc(c.h)+'</b>'}).join(', ')+' (data pribadi)':'')+(pr.length&&lain.length?'; ':'')+(lain.length?lain.map(function(c){return esc(c.h)}).join(', '):'')+'. Isi kolom ini dibuang dan tidak tersimpan di Trapesium.</span></div>';
+ if(nh)h+='<div class="map pii"><span><b>Disamarkan di Detail/Catatan:</b> '+[x.hit.nik?x.hit.nik+' NIK':'',x.hit.hp?x.hit.hp+' nomor HP':'',x.hit.email?x.hit.email+' email':'',x.hit.nomor?x.hit.nomor+' nomor lain (rekening/NPWP)':''].filter(Boolean).join(', ')+'. Diganti tanda seperti [NIK] atau [no. HP].</span></div>';
  if(x.rows.length){h+='<div class="tablewrap" style="max-height:280px;margin:0;padding:0"><table><thead><tr><th>Tanggal</th><th>Datang</th><th>Keluar</th><th>Jenis kelamin</th><th>Layanan</th><th>Detail</th><th>Catatan</th></tr></thead><tbody>';
   x.rows.slice(0,8).forEach(function(v){h+='<tr><td class="n">'+fmtD(v.date)+'</td><td class="n">'+v.time+'</td><td class="n">'+v.out+(v.est?' <span class="mu">est.</span>':'')+'</td><td>'+gid(v.gender)+'</td><td><span class="tag '+v.type+'">'+v.type+'</span></td><td>'+esc(v.detail)+'</td><td>'+esc(v.note||'–')+'</td></tr>'});
   h+='</tbody></table></div>'+(x.rows.length>8?'<div class="hint">dan '+(x.rows.length-8)+' baris lainnya</div>':'');}
