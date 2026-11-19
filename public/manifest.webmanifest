@@ -3,7 +3,7 @@
   "short_name": "Trapesium",
   "description": "Tracker Pelayanan dan Sistem Informasi Umum — layanan konsumen dan edukasi OJK Provinsi Banten",
   "id": "/",
-  "start_url": "/",
+  "start_url": "/pegawai",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",

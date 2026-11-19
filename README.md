@@ -2,13 +2,14 @@
 
 Tracker Pelayanan dan Sistem Informasi Umum. Aplikasi web (PWA) untuk mencatat dan menganalisis pelayanan konsumen serta kegiatan edukasi keuangan di Kantor OJK Provinsi Banten. Status: prototipe.
 
-Live: https://pepktracking.vercel.app
+Live: https://pepktracking.vercel.app (pengunjung) dan https://pepktracking.vercel.app/pegawai (pegawai)
 
 ## Isi repo
 
 | Lokasi | Isi |
 |---|---|
-| `public/index.html` | Seluruh aplikasi (HTML, CSS, JS dalam satu file) |
+| `public/index.html` | Halaman publik pengunjung (alamat utama, juga `/layanan`): tombol ke Google Form resmi OJK dan info edukasi. Tanpa login, tidak menyimpan data. Link formulir di variabel `FORMULIR` |
+| `public/pegawai/index.html` | Aplikasi dasbor pegawai di `/pegawai` (HTML, CSS, JS dalam satu file), wajib login |
 | `public/sw.js` | Service worker untuk cache dan mode offline. Naikkan versi `CACHE` setiap ada perubahan besar |
 | `public/manifest.webmanifest` | Manifest PWA |
 | `public/.well-known/assetlinks.json` | Verifikasi domain untuk APK Android (TWA) |
@@ -31,7 +32,7 @@ Live: https://pepktracking.vercel.app
 
 ## Layanan yang dipakai
 
-- **Firebase** (proyek `trapesium-4339d`): login Google dan database Firestore (koleksi `visits` dan `edu`). Konfigurasi web ada di `index.html` (variabel `FBC`); ini bukan rahasia, keamanan diatur oleh Firestore Security Rules.
+- **Firebase** (proyek `trapesium-4339d`): login Google dan database Firestore (koleksi `visits` dan `edu`). Konfigurasi web ada di `pegawai/index.html` (variabel `FBC`); ini bukan rahasia, keamanan diatur oleh Firestore Security Rules.
 - **Vercel**: hosting, fungsi `api/`, dan Blob store privat.
 - **Gemini API** (Google AI Studio, tier gratis): AI untuk rangkuman dan sentimen.
 
@@ -53,7 +54,7 @@ Setelah mengubah environment variable, deploy ulang agar terbaca.
 ## Hak akses
 
 Hanya akun yang terdaftar yang bisa membuka Trapesium:
-- **Pemilik**: email di `EDITORS` (`public/index.html`, `api/backup.js`, `api/notes.js`, `api/sheet.js`) dan di `firestore.rules`. Selalu editor, dan satu-satunya yang bisa mengatur daftar akses.
+- **Pemilik**: email di `EDITORS` (`public/pegawai/index.html`, `api/backup.js`, `api/notes.js`, `api/sheet.js`) dan di `firestore.rules`. Selalu editor, dan satu-satunya yang bisa mengatur daftar akses.
 - **Akun lain**: didaftarkan pemilik lewat kartu **Akses akun** di tab Data (koleksi Firestore `akses`, satu dokumen per email, peran `pembaca` atau `editor`). Akun yang tidak terdaftar langsung ditolak setelah login.
 
 Kunci sebenarnya ada di **Firestore Security Rules** (`firestore.rules`). Setiap kali file itu berubah, salin isinya ke Firebase Console → Firestore Database → Rules → Publish. Tanpa langkah itu, penolakan di aplikasi hanya tampilan.
@@ -64,7 +65,7 @@ Backup dan Logbook (fungsi `api/`) hanya untuk pemilik.
 
 Semua teks yang dikirim ke Gemini lewat `api/_gemini.js`, dan di sana NIK, nomor HP, email, NPWP, dan nomor rekening diganti tanda seperti [NIK] (`api/_pii.js`). Detail dan Catatan yang diketik manual juga disamarkan sebelum disimpan.
 
-Ke Gemini hanya dikirim angka agregat (rangkuman) dan teks catatan petugas (sentimen). Saat impor dari Google Sheets atau file, kolom data pribadi (nama, NIK, KK, NPWP, HP/WA, email, alamat, tanggal lahir, rekening, dll.) tidak pernah diimpor, dan NIK, nomor HP, email, NPWP, serta nomor rekening yang terselip di Detail/Catatan diganti tanda seperti [NIK] sebelum disimpan (fungsi `samarkan` di `index.html`). Nama orang di dalam teks bebas belum bisa disaring otomatis, jadi tetap jangan menulis nama konsumen di Catatan dan Detail. Sebelum aplikasi dipakai lebih luas, konfirmasi kebijakan data ke pihak OJK.
+Ke Gemini hanya dikirim angka agregat (rangkuman) dan teks catatan petugas (sentimen). Saat impor dari Google Sheets atau file, kolom data pribadi (nama, NIK, KK, NPWP, HP/WA, email, alamat, tanggal lahir, rekening, dll.) tidak pernah diimpor, dan NIK, nomor HP, email, NPWP, serta nomor rekening yang terselip di Detail/Catatan diganti tanda seperti [NIK] sebelum disimpan (fungsi `samarkan` di `pegawai/index.html`). Nama orang di dalam teks bebas belum bisa disaring otomatis, jadi tetap jangan menulis nama konsumen di Catatan dan Detail. Sebelum aplikasi dipakai lebih luas, konfirmasi kebijakan data ke pihak OJK.
 
 ## APK Android
 
