@@ -574,7 +574,7 @@ function classify(note,cb,form){
  if(!navigator.onLine){cb(lexSent(note),'kata');return}
  if(b){b.disabled=true;b.textContent='Menganalisis sentimen…'}
  var ctl=('AbortController' in window)?new AbortController():null,tm=setTimeout(function(){if(ctl)ctl.abort()},10000);
- fetch('/api/sentiment',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({note:note}),signal:ctl&&ctl.signal})
+ fetch('/api/sentiment',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({note:samarkan(note,{nik:0,hp:0,email:0,nomor:0})}),signal:ctl&&ctl.signal})
   .then(function(r){return r.json()}).then(function(j){clearTimeout(tm);var m={pos:1,neg:1,net:1}[j&&j.sentimen];if(m)cb(j.sentimen,'ai');else cb(lexSent(note),'kata')},
    function(){clearTimeout(tm);cb(lexSent(note),'kata')});
 }
@@ -1127,7 +1127,7 @@ function aggPel(f){
   total_layanan:f.length,per_jenis_layanan:bt,rata_rata_layanan_per_hari_layanan:+(f.length/nd).toFixed(1),rata_rata_durasi_menit:Math.round(dur/f.length),
   jenis_kelamin:g,jenis_kelamin_per_layanan:gj,per_bulan:mon,per_jam_kedatangan:hr,per_hari:wd,slot_tersibuk:topOf(slot,3),
   sentimen:Object.assign({dinilai:sent.positif+sent.negatif+sent.netral,tidak_dinilai:f.length-(sent.positif+sent.negatif+sent.netral)},sent),
-  keperluan_teratas:topOf(det,5).map(function(x){return[labDet(x[0]),x[1]]}),jumlah_jenis_keperluan:Object.keys(det).length,topik_masalah_teratas:topOf(topicCount(f),8),catatan_dirangkum_ai:f.filter(function(v){return v.sum}).length};
+  keperluan_teratas:topOf(det,5).map(function(x){return[samarkan(labDet(x[0]),{nik:0,hp:0,email:0,nomor:0}),x[1]]}),jumlah_jenis_keperluan:Object.keys(det).length,topik_masalah_teratas:topOf(topicCount(f),8),catatan_dirangkum_ai:f.filter(function(v){return v.sum}).length};
  if(pd.list.length<=62)a.harian=pd.list.map(function(d){return[d,pd.per[d].t]});
  else{var wk={};pd.list.forEach(function(d){var x=dOf(d);x.setDate(x.getDate()-((x.getDay()+6)%7));var k=ymd(x);wk[k]=(wk[k]||0)+pd.per[d].t});a.mingguan_mulai_senin=Object.keys(wk).sort().map(function(k){return[k,wk[k]]})}
  return a}
@@ -1424,7 +1424,7 @@ function topicCount(f){var c={};f.forEach(function(v){(v.topics||[]).forEach(fun
 function knownTopics(){return topOf(topicCount(S.visits),40).map(function(x){return x[0]})}
 function analyze(note,cb){
  var ctl=('AbortController' in window)?new AbortController():null,tm=setTimeout(function(){if(ctl)ctl.abort()},12000);
- fetch('/api/sentiment',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({note:note,known:knownTopics()}),signal:ctl&&ctl.signal})
+ fetch('/api/sentiment',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({note:samarkan(note,{nik:0,hp:0,email:0,nomor:0}),known:knownTopics()}),signal:ctl&&ctl.signal})
   .then(function(r){return r.json()}).then(function(j){clearTimeout(tm);if(j&&{pos:1,neg:1,net:1}[j.sentimen])cb({sent:j.sentimen,by:'ai',sum:j.ringkas||'',topics:Array.isArray(j.topik)?j.topik:[]});else cb(null)},function(){clearTimeout(tm);cb(null)})}
 function cloudCard(f){
  var c=topicCount(f),ks=topOf(c,28),noted=f.filter(function(v){return v.note}).length,todo=S.visits.filter(function(v){return v.note&&!v.sum}).length,ed=role==='editor'&&art!==false;
@@ -1470,9 +1470,10 @@ function bind(){
  document.querySelectorAll('[data-freset]').forEach(function(b){b.onclick=function(){F={from:'',to:'',type:'',gender:'',q:''};render()}});
  var fv=document.getElementById('addV');
  if(fv){fv.querySelectorAll('[name=type]').forEach(function(r){r.onchange=function(){var d=fv.querySelector('[name=detail]');if(r.value==='SLIK')d.value='pengecekan SLIK';else if(d.value==='pengecekan SLIK')d.value=''}});
-  fv.onsubmit=function(ev){ev.preventDefault();var x=Object.fromEntries(new FormData(fv));x.detail=(x.detail||'').trim();if(!x.detail)return;if(!x.out){delete x.out;estOut(x)}
-   x.note=(x.note||'').trim();if(!x.note)delete x.note;
-   function done(){x.id=rid();x.u=Date.now();S.visits.push(x);sortV();flash='Tersimpan: '+gid(x.gender)+', '+x.type+', datang '+x.time+', keluar '+x.out+(x.est?' (est.)':'')+(x.sent?'. Sentimen '+SENT[x.sent].toLowerCase()+' (dinilai lewat '+SBY[x.sentBy]+')':'')+(x.sum?'. Ringkasan: '+x.sum:'');save()}
+  fv.onsubmit=function(ev){ev.preventDefault();var x=Object.fromEntries(new FormData(fv));var hit={nik:0,hp:0,email:0,nomor:0};x.detail=samarkan((x.detail||'').trim(),hit);if(!x.detail)return;if(!x.out){delete x.out;estOut(x)}
+   x.note=samarkan((x.note||'').trim(),hit);if(!x.note)delete x.note;
+   var nh=hit.nik+hit.hp+hit.email+hit.nomor;
+   function done(){x.id=rid();x.u=Date.now();S.visits.push(x);sortV();flash=(nh?'Data pribadi (NIK/HP/email/nomor) di Detail atau Catatan disamarkan otomatis. ':'')+'Tersimpan: '+gid(x.gender)+', '+x.type+', datang '+x.time+', keluar '+x.out+(x.est?' (est.)':'')+(x.sent?'. Sentimen '+SENT[x.sent].toLowerCase()+' (dinilai lewat '+SBY[x.sentBy]+')':'')+(x.sum?'. Ringkasan: '+x.sum:'');save()}
    var man=!!x.sent;if(man)x.sentBy='manual';else delete x.sent;
    if(!x.note){done();return}
    if(!navigator.onLine){if(!man){x.sent=lexSent(x.note);x.sentBy='kata'}done();return}

@@ -59,6 +59,8 @@ Pengguna lain yang login hanya bisa melihat.
 
 ## Privasi
 
+Semua teks yang dikirim ke Gemini lewat `api/_gemini.js`, dan di sana NIK, nomor HP, email, NPWP, dan nomor rekening diganti tanda seperti [NIK] (`api/_pii.js`). Detail dan Catatan yang diketik manual juga disamarkan sebelum disimpan.
+
 Ke Gemini hanya dikirim angka agregat (rangkuman) dan teks catatan petugas (sentimen). Saat impor dari Google Sheets atau file, kolom data pribadi (nama, NIK, KK, NPWP, HP/WA, email, alamat, tanggal lahir, rekening, dll.) tidak pernah diimpor, dan NIK, nomor HP, email, NPWP, serta nomor rekening yang terselip di Detail/Catatan diganti tanda seperti [NIK] sebelum disimpan (fungsi `samarkan` di `index.html`). Nama orang di dalam teks bebas belum bisa disaring otomatis, jadi tetap jangan menulis nama konsumen di Catatan dan Detail. Sebelum aplikasi dipakai lebih luas, konfirmasi kebijakan data ke pihak OJK.
 
 ## APK Android

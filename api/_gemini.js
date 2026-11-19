@@ -1,4 +1,5 @@
 // Panggilan Gemini API (Google AI Studio, tier gratis). Key disimpan di env GEMINI_API_KEY di Vercel.
+const { samarkan } = require('./_pii');
 const CHAIN = ['gemini-3.8-flash', 'gemini-3.6-flash', 'gemini-3.5-flash-lite', 'gemini-flash-latest', 'gemini-2.5-flash', 'gemini-flash-lite-latest'];
 let good = null;
 
@@ -6,7 +7,7 @@ class GeminiError extends Error { constructor(msg, status) { super(msg); this.st
 
 async function call(model, key, prompt, opt) {
   const body = {
-    contents: [{ role: 'user', parts: [{ text: prompt }] }],
+    contents: [{ role: 'user', parts: [{ text: samarkan(prompt) }] }], // data pribadi tidak pernah dikirim ke Gemini
     generationConfig: Object.assign({ temperature: opt.temperature == null ? 0.3 : opt.temperature, maxOutputTokens: opt.maxTokens || 4096 }, opt.json ? { responseMimeType: 'application/json' } : {})
   };
   const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + model + ':generateContent', {
