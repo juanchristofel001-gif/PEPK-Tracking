@@ -6,6 +6,7 @@ const { verify } = require('./_auth');
 const KATEGORI = require('./_kategori');
 const EDITORS = ['juanchristofel001@gmail.com'];
 const JENIS = ['SLIK', 'Pengaduan', 'Lainnya'];
+const KAB = ['Kota Serang', 'Kabupaten Serang', 'Kota Cilegon', 'Kota Tangerang', 'Kabupaten Tangerang', 'Kota Tangerang Selatan', 'Kabupaten Pandeglang', 'Kabupaten Lebak', 'Luar Banten'];
 
 const bulanOk = (m) => /^\d{4}-(0[1-9]|1[0-2])$/.test(m);
 const angka = (n) => (Number.isInteger(n) && n >= 0 && n < 1e6 ? n : null);
@@ -25,9 +26,11 @@ function bersihkan(a) {
     if (!r || !bulanOk(r.bulan) || !JENIS.includes(r.jenis) || !KATEGORI.includes(r.kategori)) continue;
     const n = angka(r.jumlah);
     if (!n) continue;
-    baris.push({ bulan: r.bulan, jenis: r.jenis, kategori: r.kategori, wilayah: String(r.wilayah || '').slice(0, 80), jumlah: n });
+    const kab = KAB.includes(r.kab) ? r.kab : '';
+    const kec = kab && /^[A-Za-z ]{2,40}$/.test(String(r.kec || '')) ? String(r.kec) : '';
+    baris.push({ bulan: r.bulan, jenis: r.jenis, kategori: r.kategori, kab, kec, jumlah: n });
   }
-  return { versi: 1, perBulan, baris };
+  return { versi: 2, perBulan, baris };
 }
 
 module.exports = async (req, res) => {

@@ -516,6 +516,7 @@ td.nt{min-width:180px;max-width:320px}
 .tpx{margin-top:12px}.tpx .btn{width:auto!important}
 .vsum{display:block;margin-top:4px;font-size:12.5px;color:var(--mute)}
 .vtp{display:inline-block;margin:4px 4px 0 0;padding:1px 8px;border-radius:999px;background:var(--redt);color:var(--redd);font-size:11.5px;font-weight:700}
+.asal{display:grid;grid-template-columns:1fr 1fr;gap:24px}@media(max-width:700px){.asal{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -757,7 +758,8 @@ function viewStats(){
   card('Jenis kelamin per layanan','Perbandingan laki-laki dan perempuan',genderBars(f),'sp5',8,'users')+
   card('Sentimen konsumen','Dari catatan petugas pada tiap kunjungan',sentCard(f),'sp5',9,'chat')+
   card('Keperluan terbanyak','Dikelompokkan dari kolom detail',topDetail(f),'sp7',10,'doc')+
-  card('Masalah yang sering muncul','Topik dari catatan petugas, dirangkum AI',cloudCard(f),'sp12',11,'chat')+'</div>';
+  card('Masalah yang sering muncul','Topik dari catatan petugas, dirangkum AI',cloudCard(f),'sp12',11,'chat')+
+  card('Asal konsumen','Kab/kota dan kecamatan domisili, tanpa alamat lengkap',asalCard(f),'sp12',12,'users')+'</div>';
 }
 function kpi(l,v,s,x,cls,d){return '<div class="kpi rise '+cls+'" style="--d:'+d+'"><div style="min-width:0"><div class="l">'+l+'</div><div class="v">'+v+'</div><div class="s">'+s+'</div></div>'+(x||'')+'</div>'}
 function card(title,sub,body,cls,d,ic){var hd=ic?'<div class="chd"><span class="ill">'+ill(ic)+'</span><div style="min-width:0"><h2>'+title+'</h2><div class="sub">'+(sub||'&nbsp;')+'</div></div></div>':'<h2>'+title+'</h2>'+(sub?'<div class="sub">'+sub+'</div>':'<div style="height:14px"></div>');return '<div class="card rise '+cls+'" style="--d:'+(d||0)+'">'+hd+body+'</div>'}
@@ -843,6 +845,13 @@ function genderBars(f){
    (r.m?'<div style="flex:'+r.m+';background:'+COL.Male+'"></div>':'')+(r.w?'<div style="flex:'+r.w+';background:'+COL.Female+';margin-left:'+(r.m?2:0)+'px"></div>':'')+'</div></div></div>'});
  return s;
 }
+function wilTeks(v){return v.kab?esc(v.kab.replace('Kabupaten ','Kab. '))+(v.kec?'<br><span class="mu">Kec. '+esc(v.kec)+'</span>':''):'<span class="mu">–</span>'}
+function asalCard(f){
+ var ada=f.filter(function(v){return v.kab}),kab={},kec={};
+ if(!ada.length)return '<div class="empty">Belum ada data wilayah. Isi kab/kota dan kecamatan saat mencatat, atau impor ulang sheet Google Form: wilayah diambil dari kolom alamat, dan data yang sudah ada akan dilengkapi.</div>';
+ ada.forEach(function(v){kab[v.kab]=(kab[v.kab]||0)+1;if(v.kec){var k=v.kec+' ('+v.kab.replace('Kabupaten ','Kab. ')+')';kec[k]=(kec[k]||0)+1}});
+ function bars(o,n){var a=topOf(o,n);if(!a.length)return '<div class="mu">Belum ada kecamatan yang terbaca.</div>';var mx=a[0][1];return a.map(function(x){return '<div class="hb"'+tip('<b>'+esc(x[0])+'</b><br>'+x[1]+' konsumen')+'><div class="hbl"><span>'+esc(x[0])+'</span><b>'+x[1]+'</b></div><div class="tbw"><div class="tb grow" style="width:'+Math.max(2,x[1]/mx*100)+'%"></div></div></div>'}).join('')}
+ return '<div class="asal"><div><div class="note" style="margin:0 0 8px"><b>Kab/kota</b></div>'+bars(kab,9)+'</div><div><div class="note" style="margin:0 0 8px"><b>Kecamatan teratas</b></div>'+bars(kec,8)+'</div></div><div class="mu" style="margin-top:10px">'+ada.length+' dari '+f.length+' konsumen punya data wilayah.</div>'}
 function topDetail(f){
  var c={};f.forEach(function(v){var k=String(v.detail).trim().toLowerCase().replace(/\s+/g,' ');c[k]=(c[k]||0)+1});
  var a=Object.keys(c).map(function(k){return{k:k,n:c[k]}}).sort(function(x,y){return y.n-x.n||x.k.localeCompare(y.k)}),top=a.slice(0,5),rest=a.slice(5),rn=0,mx=top[0].n,s='';
@@ -870,6 +879,8 @@ function viewAdd(){
   '<label class="c2">Jam keluar (opsional)<input type="time" name="out"></label>'+
   '<div class="fl c3"><b>Jenis kelamin</b>'+radios('gender',[['Male','Laki-laki'],['Female','Perempuan']],'Male')+'</div>'+
   '<div class="fl c3"><b>Layanan</b>'+radios('type',[['SLIK','SLIK'],['Pengaduan','Pengaduan'],['Lainnya','Lainnya']],'SLIK')+'</div>'+
+  '<label class="c3">Kab/kota domisili (opsional)<select name="kab" id="fKab"><option value="">Tidak diketahui</option>'+KABS.concat(['Luar Banten']).map(function(k){return '<option>'+esc(k)+'</option>'}).join('')+'</select></label>'+
+  '<label class="c3">Kecamatan (opsional)<select name="kec" id="fKec" disabled><option value="">Pilih kab/kota dulu</option></select></label>'+
   '<label class="c6">Detail<input name="detail" required placeholder="mis. pengecekan SLIK" value="pengecekan SLIK"></label>'+
   '<label class="c6">Catatan tentang konsumen (opsional)<textarea name="note" rows="2" placeholder="mis. konsumen merasa terbantu dan penjelasannya jelas"></textarea></label>'+
   '<label class="c3">Sentimen konsumen<select name="sent"><option value="">Otomatis dari catatan</option><option value="pos">Positif</option><option value="neg">Negatif</option><option value="net">Netral</option></select></label>'+
@@ -909,26 +920,76 @@ function pgender(s){var v=String(s||'').trim().toLowerCase();if(/perempuan|wanit
 function ptype(s,detail){var v=String(s||'').toLowerCase(),d=String(detail||'').toLowerCase();if(/slik/.test(v))return 'SLIK';if(/aduan|complain|komplain/.test(v))return 'Pengaduan';if(v.trim())return 'Lainnya';if(/slik/.test(d))return 'SLIK';if(/aduan/.test(d))return 'Pengaduan';return 'Lainnya'}
 // Kolom data pribadi tidak pernah dipetakan/diimpor, walau judulnya mirip kolom lain (mis. "Tanggal lahir", "Detail alamat").
 var PII_HEAD=/(^|[^a-z])(nama|name|nik|ktp|no\.? ?kk|kartu keluarga|npwp|hp|handphone|telepon|telp|phone|ponsel|wa|whatsapp|e-?mail|surel|alamat|address|domisili|rekening|no\.? ?rek|lahir|ttl|usia|umur|tanda tangan|ttd|instagram|ig)([^a-z]|$)/;
+/* ---------- wilayah konsumen (kab/kota + kecamatan) ---------- */
+// Daftar kecamatan Banten, sama dengan SiPEDULIKU (shared/kecamatan.ts).
+var KEC={"Kota Serang":["Cipocok Jaya","Curug","Kasemen","Serang","Taktakan","Walantaka"],"Kabupaten Serang":["Anyar","Bandung","Baros","Binuang","Bojonegara","Carenang","Cikande","Cikeusal","Cinangka","Ciomas","Ciruas","Gunung Sari","Jawilan","Kibin","Kopo","Kragilan","Kramatwatu","Lebak Wangi","Mancak","Pabuaran","Padarincang","Pamarayan","Petir","Pontang","Pulo Ampel","Tanara","Tirtayasa","Tunjung Teja","Waringinkurung"],"Kota Cilegon":["Cibeber","Cilegon","Citangkil","Ciwandan","Gerogol","Jombang","Pulomerak","Purwakarta"],"Kota Tangerang":["Batuceper","Benda","Cibodas","Ciledug","Cipondoh","Jatiuwung","Karang Tengah","Karawaci","Larangan","Neglasari","Periuk","Pinang","Tangerang"],"Kabupaten Tangerang":["Balaraja","Cikupa","Cisauk","Cisoka","Curug","Gunung Kaler","Jambe","Jayanti","Kelapa Dua","Kemiri","Kosambi","Kresek","Kronjo","Legok","Mauk","Mekar Baru","Pagedangan","Pakuhaji","Panongan","Pasar Kemis","Rajeg","Sepatan","Sepatan Timur","Sindang Jaya","Solear","Sukadiri","Sukamulya","Teluknaga","Tigaraksa"],"Kota Tangerang Selatan":["Ciputat","Ciputat Timur","Pamulang","Pondok Aren","Serpong","Serpong Utara","Setu"],"Kabupaten Pandeglang":["Angsana","Banjar","Bojong","Cadasari","Carita","Cibaliung","Cibitung","Cigeulis","Cikedal","Cikeusik","Cimanggu","Cimanuk","Cipeucang","Cisata","Jiput","Kaduhejo","Karang Tanjung","Koroncong","Labuan","Majasari","Mandalawangi","Mekarjaya","Menes","Munjul","Pagelaran","Pandeglang","Panimbang","Patia","Picung","Pulosari","Saketi","Sindangresmi","Sobang","Sukaresmi","Sumur"],"Kabupaten Lebak":["Banjarsari","Bayah","Bojongmanik","Cibadak","Cibeber","Cigemblong","Cihara","Cijaku","Cikulur","Cileles","Cilograng","Cimarga","Cipanas","Cirinten","Curug Bitung","Gunungkencana","Kalanganyar","Lebakgedong","Leuwidamar","Maja","Malingping","Muncang","Panggarangan","Rangkasbitung","Sajira","Sobang","Wanasalam","Warunggunung"]};
+var KABS=Object.keys(KEC);
+// Pola kab/kota pada teks yang sudah dinormalkan (huruf kecil, tanda baca jadi spasi). Urutan penting: yang spesifik dulu.
+var KABP=[['Kota Tangerang Selatan',/ (kota )?(tangerang selatan|tangsel) /],['Kabupaten Tangerang',/ kab(upaten)? (tangerang|tng) /],['Kota Tangerang',/ kota (tangerang|tng) /],
+ ['Kabupaten Serang',/ kab(upaten)? (serang|srg) /],['Kota Serang',/ kota (serang|srg) /],['Kota Cilegon',/ (kota )?cilegon /],['Kabupaten Pandeglang',/ (kab(upaten)? )?pandeglang /],['Kabupaten Lebak',/ kab(upaten)? lebak /]];
+// Nama kecamatan yang sama dengan nama kota: hanya dihitung kalau ditulis "Kec. ...", karena "Serang"/"Tangerang" saja biasanya maksudnya kota/kabupaten.
+var KEC_KOTA={serang:1,tangerang:1,cilegon:1,pandeglang:1};
+var LUAR=/ (jakarta|dki|bogor|depok|bekasi|bandung|jawa barat|jabar|jawa tengah|jawa timur|yogyakarta|sumatera|sumatra|lampung|kalimantan|sulawesi|bali|papua) /;
+var KECL=[];KABS.forEach(function(k){KEC[k].forEach(function(c){KECL.push({kab:k,kec:c,re:new RegExp(' '+c.toLowerCase().replace(/\s+/g,'').split('').join(' ?')+' ','g')})})});
+// Mengambil kab/kota dan kecamatan dari teks alamat. Alamatnya sendiri tidak disimpan di mana pun.
+function wilayahDari(t){
+ var n=' '+String(t||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/ kec(amatan)? /g,' kec ').replace(/ kab /g,' kab ').trim()+' ';
+ if(n.trim()==='')return{kab:'',kec:''};
+ var kabs=[],m;
+ KABP.forEach(function(p){if(p[1].test(n)){kabs.push(p[0]);n=n.replace(p[1],' | ')}});
+ var cand=[];
+ KECL.forEach(function(c){c.re.lastIndex=0;while((m=c.re.exec(n))){var eks=n.slice(Math.max(0,m.index-4),m.index+1)===' kec ';
+  if(KEC_KOTA[c.kec.toLowerCase()]&&!eks)continue;cand.push({kab:c.kab,kec:c.kec,pos:m.index,eks:eks});c.re.lastIndex=m.index+1}});
+ if(kabs.length)cand=cand.filter(function(c){return kabs.indexOf(c.kab)>=0});
+ if(cand.some(function(c){return c.eks}))cand=cand.filter(function(c){return c.eks});
+ if(cand.length){
+  // Alamat biasanya dari kecil ke besar (desa, kecamatan, kab/kota): ambil yang paling akhir disebut.
+  var last=cand.reduce(function(a,b){return b.pos>a.pos?b:a});
+  var sama=cand.filter(function(c){return c.pos===last.pos}),pj=Math.max.apply(null,sama.map(function(c){return c.kec.length}));
+  sama=sama.filter(function(c){return c.kec.length===pj}); // "Serpong Utara" menang atas "Serpong"
+  if(sama.length===1)return{kab:sama[0].kab,kec:sama[0].kec};
+  // Nama kecamatan kembar di dua kab/kota (Curug, Cibeber, Sobang) dan kab/kota tidak disebut.
+  return{kab:kabs.length===1?kabs[0]:'',kec:''}}
+ if(kabs.length===1)return{kab:kabs[0],kec:''};
+ if(!kabs.length&&LUAR.test(n))return{kab:'Luar Banten',kec:''};
+ return{kab:'',kec:''}}
+// Samarkan nama orang: kata setelah sapaan (Bu/Pak/Sdr/...) atau penanda nama ("atas nama", "bernama", "a.n.").
+var SAPA='(?:ibu|bu|bapak|bpk|pak|sdr|sdri|saudara|saudari|mas|mbak|mba|kak|kang|teh|neng|aa|tn|ny|nn|nyonya|tuan)';
+var PENANDA='(?:atas nama|a\\.n\\.?|bernama|namanya)';
+var BUKAN=/^(dari|yang|sudah|belum|ini|itu|dan|atau|petugas|kepala|ke|di|untuk|tersebut|konsumen|nasabah|bank|menanyakan|mengadu|datang|ingin|mau|sedang|tidak|bisa|juga|saja|lagi|sendiri|nya|dengan|pada|karena|merasa|bilang|minta|meminta|bertanya|terkait|soal|tentang|selaku|sebagai|lurah|rt|rw|ojk|polisi|debt|kolektor|collector|pemilik|orang|perusahaan)$/i;
+function ci(p){return p.replace(/[a-z]/g,function(c){return '['+c+c.toUpperCase()+']'})}
+function samarkanNama(t){t=String(t||'');var n=0;
+ t=t.replace(new RegExp('(^|[^A-Za-z])('+ci(SAPA)+'\\.?)\\s+([A-Za-z\'][A-Za-z\'.-]*)((?:\\s+[A-Z][A-Za-z\'.-]*){0,3})','g'),function(m,a,s,w1,rest){
+  if(BUKAN.test(w1)||w1==='[NAMA]')return m;n++;return a+s+' [NAMA]'});
+ t=t.replace(new RegExp('(^|[^A-Za-z])('+ci(PENANDA)+')\\s*:?\\s+([A-Za-z\'][A-Za-z\'.-]*)((?:\\s+[A-Z][A-Za-z\'.-]*){0,3})','g'),function(m,a,s,w1,rest){
+  if(BUKAN.test(w1))return m;n++;return a+s+' [NAMA]'});
+ return{t:t,n:n}}
 // Samarkan data pribadi yang terselip di teks bebas (Detail, Catatan) sebelum disimpan.
 function samarkan(t,hit){t=String(t||'');
  t=t.replace(/[\w.+-]+@[\w-]+(\.[\w-]+)+/g,function(){hit.email++;return '[email]'});
  t=t.replace(/\d{2}\.\d{3}\.\d{3}\.\d-\d{3}\.\d{3}/g,function(){hit.nomor++;return '[NPWP]'});
  t=t.replace(/(^|[^\d])(\d{16})(?!\d)/g,function(m,a){hit.nik++;return a+'[NIK]'});
+ t=t.replace(/(^|[^\d])(\d(?:[ .-]?\d){15})(?![\d])/g,function(m,a,n){if(!/^(\+?62|0)8/.test(n)){hit.nik++;return a+'[NIK]'}return m});
  t=t.replace(/(^|[^\d+])((?:\+62|62|0)\s?8[\d\s.-]{7,14}\d)(?!\d)/g,function(m,a,n){if(n.replace(/\D/g,'').length<10)return m;hit.hp++;return a+'[no. HP]'});
  t=t.replace(/(rp\.?\s*)?(\d[\d.\s-]{8,}\d)/gi,function(m,rp,n){if(rp||n.replace(/\D/g,'').length<10)return m;hit.nomor++;return '[nomor]'});
- return t}
+ var nm=samarkanNama(t);hit.nama=(hit.nama||0)+nm.n;
+ return nm.t}
 function buildImport(rows,src){
  var hi=-1;for(var i=0;i<Math.min(rows.length,10);i++){if(rows[i].filter(function(c){return String(c).trim()}).length>=2){hi=i;break}}
  if(hi<0)throw new Error('File kosong atau tidak punya baris judul kolom.');
  var head=rows[hi].map(function(c){return String(c).trim()}),map={},used={};
  var skip=[];
- head.forEach(function(hd,ci){var l=hd.toLowerCase();if(!hd)return;if(PII_HEAD.test(l)){skip.push({h:hd,p:1});return}for(var k=0;k<COLP.length;k++){var key=COLP[k][0];if(!used[key]&&COLP[k][1].test(l)){map[key]=ci;used[key]=hd;break}}if(Object.keys(map).every(function(k){return map[k]!==ci}))skip.push({h:hd})});
+ var lokC=[];
+ head.forEach(function(hd,ci){var l=hd.toLowerCase();if(!hd)return;
+  // Alamat/domisili/kecamatan: hanya dipakai untuk menebak kab/kota dan kecamatan, teksnya tidak disimpan.
+  if(/(^|[^a-z])(alamat|address|domisili|kecamatan|kelurahan|desa|kabupaten|kab\/kota|kota)([^a-z]|$)/.test(l)&&!/e-?mail|surel/.test(l)){lokC.push(ci);skip.push({h:hd,p:1,lok:1});return}
+  if(PII_HEAD.test(l)){skip.push({h:hd,p:1});return}for(var k=0;k<COLP.length;k++){var key=COLP[k][0];if(!used[key]&&COLP[k][1].test(l)){map[key]=ci;used[key]=hd;break}}if(Object.keys(map).every(function(k){return map[k]!==ci}))skip.push({h:hd})});
  if(map.date==null&&map.ts==null)throw new Error('Kolom tanggal tidak ditemukan. Pastikan ada kolom "Tanggal" atau "Timestamp".');
  var body=rows.slice(hi+1),dc=map.date!=null?map.date:map.ts,order='dm',sawA=false,sawB=false;
  body.forEach(function(r){var p=dparts(r[dc]);if(p&&!p.iso){if(p.a>12)sawA=true;if(p.b>12)sawB=true}});
  if(sawB&&!sawA)order='md';
- var have={},seen={};S.visits.forEach(function(v){var k=k5(v);have[k]=(have[k]||0)+1});
- var out=[],dup=0,bad=0,hit={nik:0,hp:0,email:0,nomor:0};
+ var have={},haveL={},seen={};S.visits.forEach(function(v){var k=k5(v);have[k]=(have[k]||0)+1;(haveL[k]=haveL[k]||[]).push(v)});
+ var out=[],dup=0,bad=0,hit={nik:0,hp:0,email:0,nomor:0,nama:0},fill=[],lokN=0,lokK=0;
  body.forEach(function(r){
   var g=function(k){return map[k]!=null?String(r[map[k]]==null?'':r[map[k]]).trim():''};
   var dp=dparts(g('date')||g('ts')),date=mkDate(dp,order);
@@ -939,19 +1000,22 @@ function buildImport(rows,src){
   var x={date:date,time:time,gender:gender,type:type,detail:detail},o=ptime(g('out'));
   if(o&&o>time){x.out=o}else estOut(x);
   var note=samarkan(g('note'),hit);if(note){x.note=note;x.sent=lexSent(note);x.sentBy='kata'}
-  var k=k5(x);seen[k]=(seen[k]||0)+1;if(seen[k]<=(have[k]||0)){dup++;return}
+  var w=lokC.length?wilayahDari(lokC.map(function(c){return r[c]==null?'':String(r[c])}).join(', ')):{kab:'',kec:''};
+  if(w.kab){x.kab=w.kab;lokN++;if(w.kec){x.kec=w.kec;lokK++}}
+  var k=k5(x);seen[k]=(seen[k]||0)+1;if(seen[k]<=(have[k]||0)){dup++;var ev=haveL[k][seen[k]-1];if(w.kab&&!ev.kab)fill.push([ev,w]);return}
   out.push(x)});
- return{rows:out,dup:dup,bad:bad,map:used,src:src,skip:skip,hit:hit}}
+ return{rows:out,dup:dup,bad:bad,map:used,src:src,skip:skip,hit:hit,fill:fill,lok:lokC.length?{n:lokN,k:lokK,total:out.length+dup}:null}}
 function impPreview(){
- var x=IMP,h='<div class="isum"><span class="g">'+x.rows.length+' baru</span><span>'+x.dup+' sudah ada</span>'+(x.bad?'<span>'+x.bad+' dilewati (tanggal, jam, atau jenis kelamin kosong)</span>':'')+'</div>';
+ var x=IMP,h='<div class="isum"><span class="g">'+x.rows.length+' baru</span><span>'+x.dup+' sudah ada</span>'+(x.fill.length?'<span class="g">'+x.fill.length+' data lama dilengkapi wilayahnya</span>':'')+(x.bad?'<span>'+x.bad+' dilewati (tanggal, jam, atau jenis kelamin kosong)</span>':'')+'</div>';
  h+='<div class="map">Dari <b>'+esc(x.src)+'</b>. Kolom terbaca: '+Object.keys(x.map).map(function(k){return CLAB[k]+' ← <b>'+esc(x.map[k])+'</b>'}).join(', ')+'</div>';
- var pr=x.skip.filter(function(c){return c.p}),lain=x.skip.filter(function(c){return !c.p}),nh=x.hit.nik+x.hit.hp+x.hit.email+x.hit.nomor;
+ var pr=x.skip.filter(function(c){return c.p&&!c.lok}),lk=x.skip.filter(function(c){return c.lok}),lain=x.skip.filter(function(c){return !c.p}),nh=x.hit.nik+x.hit.hp+x.hit.email+x.hit.nomor+x.hit.nama;
+ if(lk.length)h+='<div class="map pii">'+ico(I.shield)+'<span><b>Wilayah:</b> dari kolom '+lk.map(function(c){return '<b>'+esc(c.h)+'</b>'}).join(', ')+' hanya kab/kota dan kecamatan yang diambil; teks alamatnya dibuang dan tidak tersimpan. Terbaca '+x.lok.n+' dari '+x.lok.total+' baris (kecamatan: '+x.lok.k+').</span></div>';
  if(pr.length||lain.length)h+='<div class="map pii">'+ico(I.shield)+'<span><b>Tidak diimpor:</b> '+(pr.length?pr.map(function(c){return '<b>'+esc(c.h)+'</b>'}).join(', ')+' (data pribadi)':'')+(pr.length&&lain.length?'; ':'')+(lain.length?lain.map(function(c){return esc(c.h)}).join(', '):'')+'. Isi kolom ini dibuang dan tidak tersimpan di Trapesium.</span></div>';
- if(nh)h+='<div class="map pii"><span><b>Disamarkan di Detail/Catatan:</b> '+[x.hit.nik?x.hit.nik+' NIK':'',x.hit.hp?x.hit.hp+' nomor HP':'',x.hit.email?x.hit.email+' email':'',x.hit.nomor?x.hit.nomor+' nomor lain (rekening/NPWP)':''].filter(Boolean).join(', ')+'. Diganti tanda seperti [NIK] atau [no. HP].</span></div>';
- if(x.rows.length){h+='<div class="tablewrap" style="max-height:280px;margin:0;padding:0"><table><thead><tr><th>Tanggal</th><th>Datang</th><th>Keluar</th><th>Jenis kelamin</th><th>Layanan</th><th>Detail</th><th>Catatan</th></tr></thead><tbody>';
-  x.rows.slice(0,8).forEach(function(v){h+='<tr><td class="n">'+fmtD(v.date)+'</td><td class="n">'+v.time+'</td><td class="n">'+v.out+(v.est?' <span class="mu">est.</span>':'')+'</td><td>'+gid(v.gender)+'</td><td><span class="tag '+v.type+'">'+v.type+'</span></td><td>'+esc(v.detail)+'</td><td>'+esc(v.note||'–')+'</td></tr>'});
+ if(nh)h+='<div class="map pii"><span><b>Disamarkan di Detail/Catatan:</b> '+[x.hit.nik?x.hit.nik+' NIK':'',x.hit.hp?x.hit.hp+' nomor HP':'',x.hit.email?x.hit.email+' email':'',x.hit.nomor?x.hit.nomor+' nomor lain (rekening/NPWP)':'',x.hit.nama?x.hit.nama+' nama':''].filter(Boolean).join(', ')+'. Diganti tanda seperti [NIK], [no. HP], atau [NAMA].</span></div>';
+ if(x.rows.length){h+='<div class="tablewrap" style="max-height:280px;margin:0;padding:0"><table><thead><tr><th>Tanggal</th><th>Datang</th><th>Keluar</th><th>Jenis kelamin</th><th>Layanan</th><th>Wilayah</th><th>Detail</th><th>Catatan</th></tr></thead><tbody>';
+  x.rows.slice(0,8).forEach(function(v){h+='<tr><td class="n">'+fmtD(v.date)+'</td><td class="n">'+v.time+'</td><td class="n">'+v.out+(v.est?' <span class="mu">est.</span>':'')+'</td><td>'+gid(v.gender)+'</td><td><span class="tag '+v.type+'">'+v.type+'</span></td><td>'+wilTeks(v)+'</td><td>'+esc(v.detail)+'</td><td>'+esc(v.note||'–')+'</td></tr>'});
   h+='</tbody></table></div>'+(x.rows.length>8?'<div class="hint">dan '+(x.rows.length-8)+' baris lainnya</div>':'');}
- h+='<div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">'+(x.rows.length?'<button type="button" class="btn" id="impOk">Impor '+x.rows.length+' data</button>':'')+'<button type="button" class="btn plain" id="impNo">'+(x.rows.length?'Batal':'Tutup')+'</button></div>';
+ h+='<div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">'+(x.rows.length||x.fill.length?'<button type="button" class="btn" id="impOk">'+(x.rows.length?'Impor '+x.rows.length+' data':'Lengkapi wilayah '+x.fill.length+' data')+'</button>':'')+'<button type="button" class="btn plain" id="impNo">'+(x.rows.length||x.fill.length?'Batal':'Tutup')+'</button></div>';
  return h}
 function loadXLSX(){return window.XLSX?Promise.resolve(window.XLSX):new Promise(function(ok,no){var s=document.createElement('script');s.src='https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js';s.onload=function(){ok(window.XLSX)};s.onerror=function(){no(new Error('Pembaca Excel gagal dimuat. Periksa internet, atau simpan file sebagai CSV.'))};document.head.appendChild(s)})}
 function impFrom(rowsP,src){impErr='';IMP=null;impBusy=true;render();
@@ -1000,7 +1064,7 @@ function bindImport(){
  if(u)u.onkeydown=function(e){if(e.key==='Enter'){e.preventDefault();impLink(u.value)}};
  var fi=document.getElementById('impFile');if(fi)fi.onchange=function(){impFile(fi.files[0])};
  var dz=document.getElementById('impDrop');if(dz){dz.ondragover=function(e){e.preventDefault();dz.classList.add('over')};dz.ondragleave=function(){dz.classList.remove('over')};dz.ondrop=function(e){e.preventDefault();dz.classList.remove('over');impFile(e.dataTransfer.files[0])}}
- var ok=document.getElementById('impOk');if(ok)ok.onclick=function(){var n=IMP.rows.length,t=Date.now();IMP.rows.forEach(function(x,i){x.id=rid();x.u=t+i;S.visits.push(x)});sortV();IMP=null;flash=n+' data berhasil diimpor.';save()};
+ var ok=document.getElementById('impOk');if(ok)ok.onclick=function(){var n=IMP.rows.length,t=Date.now(),fl=IMP.fill.length;IMP.rows.forEach(function(x,i){x.id=rid();x.u=t+i;S.visits.push(x)});IMP.fill.forEach(function(p,i){p[0].kab=p[1].kab;if(p[1].kec)p[0].kec=p[1].kec;p[0].u=t+n+i});sortV();IMP=null;flash=n+' data berhasil diimpor'+(fl?', '+fl+' data lama dilengkapi wilayahnya':'')+'.';save()};
  var no=document.getElementById('impNo');if(no)no.onclick=function(){IMP=null;impErr='';render()};
 }
 
@@ -1019,9 +1083,9 @@ function viewData(){
   (filterOn()?'<button class="btn soft" id="f_reset" type="button">Reset</button>':'')+'</div>';
  if(!f.length)h+='<div class="empty">Tidak ada data untuk filter ini.</div>';
  else{
-  h+='<div class="tablewrap"><table><thead><tr><th>#</th><th>Tanggal</th><th>Datang</th><th>Keluar</th><th>Durasi</th><th>Jenis kelamin</th><th>Layanan</th><th>Detail</th><th>Catatan</th><th>Sentimen</th><th></th></tr></thead><tbody>';
+  h+='<div class="tablewrap"><table><thead><tr><th>#</th><th>Tanggal</th><th>Datang</th><th>Keluar</th><th>Durasi</th><th>Jenis kelamin</th><th>Layanan</th><th>Wilayah</th><th>Detail</th><th>Catatan</th><th>Sentimen</th><th></th></tr></thead><tbody>';
   f.slice().reverse().forEach(function(v,i){var idx=S.visits.indexOf(v);
-   h+='<tr><td class="n mu">'+(f.length-i)+'</td><td class="n">'+fmtD(v.date)+'</td><td class="n">'+esc(v.time)+'</td><td class="n">'+esc(v.out)+(v.est?' <span class="mu">est.</span>':'')+'</td><td class="n">'+durMin(v)+' mnt</td><td>'+gid(v.gender)+'</td><td><span class="tag '+esc(tkey(v))+'">'+esc(v.type)+'</span></td><td>'+esc(v.detail)+'</td><td class="nt">'+(v.note?esc(v.note)+(v.sum?'<span class="vsum">AI: '+esc(v.sum)+'</span>':'')+(v.topics&&v.topics.length?'<div>'+v.topics.map(function(t){return '<span class="vtp">'+esc(t)+'</span>'}).join('')+'</div>':''):'<span class="mu">–</span>')+'</td><td>'+sentTag(v,idx)+'</td><td>'+(art===false?'':'<button class="x" title="Hapus" data-delv="'+idx+'">×</button>')+'</td></tr>'});
+   h+='<tr><td class="n mu">'+(f.length-i)+'</td><td class="n">'+fmtD(v.date)+'</td><td class="n">'+esc(v.time)+'</td><td class="n">'+esc(v.out)+(v.est?' <span class="mu">est.</span>':'')+'</td><td class="n">'+durMin(v)+' mnt</td><td>'+gid(v.gender)+'</td><td><span class="tag '+esc(tkey(v))+'">'+esc(v.type)+'</span></td><td>'+wilTeks(v)+'</td><td>'+esc(v.detail)+'</td><td class="nt">'+(v.note?esc(v.note)+(v.sum?'<span class="vsum">AI: '+esc(v.sum)+'</span>':'')+(v.topics&&v.topics.length?'<div>'+v.topics.map(function(t){return '<span class="vtp">'+esc(t)+'</span>'}).join('')+'</div>':''):'<span class="mu">–</span>')+'</td><td>'+sentTag(v,idx)+'</td><td>'+(art===false?'':'<button class="x" title="Hapus" data-delv="'+idx+'">×</button>')+'</td></tr>'});
   h+='</tbody></table></div>';
  }
  return h+'</div>';
@@ -1233,14 +1297,14 @@ function autoBk(){
   bkFetch('POST','',{data:bkData()}).then(function(){lsSet(BKK,today());BK.list=null},function(){bkStarted=false})},6000)}
 /* ---------- agregat pelayanan untuk SiPEDULIKU ---------- */
 // Hanya angka: jumlah layanan per bulan x jenis x kategori topik. Tidak ada catatan, nama, atau data pribadi.
-// Kolom wilayah sengaja ada tapi masih kosong; diisi nanti kalau domisili konsumen (kab/kota/kecamatan) mulai dicatat.
+// Wilayah = kab/kota dan kecamatan domisili konsumen (kosong kalau tidak diketahui).
 var AGK=KEY+'.agg',aggStarted=false;
 function aggPelayanan(){
  var rows={},bulan={};
- S.visits.forEach(function(v){if(!v.date)return;var m=v.date.slice(0,7),j=tkey(v),w=v.wilayah||'',ks=(v.kat||[]).filter(Boolean);
+ S.visits.forEach(function(v){if(!v.date)return;var m=v.date.slice(0,7),j=tkey(v),w=(v.kab||'')+'|'+(v.kec||''),ks=(v.kat||[]).filter(Boolean);
   bulan[m]=bulan[m]||{total:0,dianalisis:0,berkategori:0};bulan[m].total++;if(v.note&&v.sum)bulan[m].dianalisis++;if(ks.length)bulan[m].berkategori++;
   ks.forEach(function(k){var id=m+'|'+j+'|'+k+'|'+w;rows[id]=(rows[id]||0)+1})});
- return{versi:1,perBulan:bulan,baris:Object.keys(rows).sort().map(function(id){var p=id.split('|');return{bulan:p[0],jenis:p[1],kategori:p[2],wilayah:p[3],jumlah:rows[id]}})}}
+ return{versi:2,perBulan:bulan,baris:Object.keys(rows).sort().map(function(id){var p=id.split('|');return{bulan:p[0],jenis:p[1],kategori:p[2],kab:p[3],kec:p[4],jumlah:rows[id]}})}}
 function autoAgg(){
  if(aggStarted||role!=='editor'||!S.visits.length)return;aggStarted=true;
  setTimeout(function(){var a=aggPelayanan(),sig=JSON.stringify(a);
@@ -1501,10 +1565,12 @@ function bind(){
  document.querySelectorAll('[data-freset]').forEach(function(b){b.onclick=function(){F={from:'',to:'',type:'',gender:'',q:''};render()}});
  var fv=document.getElementById('addV');
  if(fv){fv.querySelectorAll('[name=type]').forEach(function(r){r.onchange=function(){var d=fv.querySelector('[name=detail]');if(r.value==='SLIK')d.value='pengecekan SLIK';else if(d.value==='pengecekan SLIK')d.value=''}});
-  fv.onsubmit=function(ev){ev.preventDefault();var x=Object.fromEntries(new FormData(fv));var hit={nik:0,hp:0,email:0,nomor:0};x.detail=samarkan((x.detail||'').trim(),hit);if(!x.detail)return;if(!x.out){delete x.out;estOut(x)}
+  var fk=document.getElementById('fKab'),fc=document.getElementById('fKec');
+  if(fk&&fc)fk.onchange=function(){var l=KEC[fk.value]||[];fc.disabled=!l.length;fc.innerHTML='<option value="">'+(l.length?'Tidak diketahui':'Pilih kab/kota dulu')+'</option>'+l.map(function(c){return '<option>'+esc(c)+'</option>'}).join('')};
+  fv.onsubmit=function(ev){ev.preventDefault();var x=Object.fromEntries(new FormData(fv));if(!x.kab)delete x.kab;if(!x.kec)delete x.kec;var hit={nik:0,hp:0,email:0,nomor:0};x.detail=samarkan((x.detail||'').trim(),hit);if(!x.detail)return;if(!x.out){delete x.out;estOut(x)}
    x.note=samarkan((x.note||'').trim(),hit);if(!x.note)delete x.note;
-   var nh=hit.nik+hit.hp+hit.email+hit.nomor;
-   function done(){x.id=rid();x.u=Date.now();S.visits.push(x);sortV();flash=(nh?'Data pribadi (NIK/HP/email/nomor) di Detail atau Catatan disamarkan otomatis. ':'')+'Tersimpan: '+gid(x.gender)+', '+x.type+', datang '+x.time+', keluar '+x.out+(x.est?' (est.)':'')+(x.sent?'. Sentimen '+SENT[x.sent].toLowerCase()+' (dinilai lewat '+SBY[x.sentBy]+')':'')+(x.sum?'. Ringkasan: '+x.sum:'');save()}
+   var nh=hit.nik+hit.hp+hit.email+hit.nomor+(hit.nama||0);
+   function done(){x.id=rid();x.u=Date.now();S.visits.push(x);sortV();flash=(nh?'Data pribadi (NIK/HP/email/nomor/nama) di Detail atau Catatan disamarkan otomatis. ':'')+'Tersimpan: '+gid(x.gender)+', '+x.type+', datang '+x.time+', keluar '+x.out+(x.est?' (est.)':'')+(x.sent?'. Sentimen '+SENT[x.sent].toLowerCase()+' (dinilai lewat '+SBY[x.sentBy]+')':'')+(x.sum?'. Ringkasan: '+x.sum:'');save()}
    var man=!!x.sent;if(man)x.sentBy='manual';else delete x.sent;
    if(!x.note){done();return}
    if(!navigator.onLine){if(!man){x.sent=lexSent(x.note);x.sentBy='kata'}done();return}
