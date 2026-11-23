@@ -28,6 +28,8 @@ Live: https://pepktracking.vercel.app (pengunjung) dan https://pepktracking.verc
 | `notes.js` | Catatan harian Logbook di Vercel Blob privat |
 | `sheet.js` | Impor dari Google Sheets yang dibagikan publik atau dipublikasikan ke web (cadangan). Link sheet biasa dibaca langsung oleh browser lewat Google Sheets API dengan izin `spreadsheets.readonly` akun yang login, jadi sheet boleh tetap privat |
 | `sync.js`, `seed.js` | Sinkronisasi dan data awal versi lama (sebelum Firebase) |
+| `kirim-agregat.js` | Meneruskan angka agregat pelayanan (jumlah per bulan × jenis × kategori topik, tanpa data pribadi) ke SiPEDULIKU. Hanya pemilik. Dipanggil otomatis saat aplikasi dibuka kalau angkanya berubah |
+| `_kategori.js` | Daftar kategori topik, sama persis dengan `TOPIK` di SiPEDULIKU. Ubah di kedua repo sekaligus |
 | `_auth.js`, `_gemini.js` | Helper: verifikasi login Firebase dan panggilan Gemini |
 
 ## Layanan yang dipakai
@@ -48,6 +50,8 @@ Impor sheet privat butuh **Google Sheets API** aktif di project Google Cloud `tr
 | `GEMINI_MODEL` | Opsional, memaksa model tertentu |
 | `BLOB_READ_WRITE_TOKEN` | Otomatis dari Vercel Blob store |
 | `SYNC_PIN` | Kode sinkron versi lama |
+| `SIPEDULIKU_URL` | Alamat SiPEDULIKU, misal `https://….vercel.app`, untuk kirim agregat pelayanan |
+| `KUNCI_AGREGAT` | Kunci rahasia yang sama dengan `KUNCI_AGREGAT` di Vercel SiPEDULIKU |
 
 Setelah mengubah environment variable, deploy ulang agar terbaca.
 

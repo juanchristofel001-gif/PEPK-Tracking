@@ -1231,6 +1231,22 @@ function autoBk(){
  if(bkStarted||role!=='editor'||lsGet(BKK)===today())return;bkStarted=true;
  setTimeout(function(){if(!cloudOk||(!S.visits.length&&!S.edu.length)){bkStarted=false;return}
   bkFetch('POST','',{data:bkData()}).then(function(){lsSet(BKK,today());BK.list=null},function(){bkStarted=false})},6000)}
+/* ---------- agregat pelayanan untuk SiPEDULIKU ---------- */
+// Hanya angka: jumlah layanan per bulan x jenis x kategori topik. Tidak ada catatan, nama, atau data pribadi.
+// Kolom wilayah sengaja ada tapi masih kosong; diisi nanti kalau domisili konsumen (kab/kota/kecamatan) mulai dicatat.
+var AGK=KEY+'.agg',aggStarted=false;
+function aggPelayanan(){
+ var rows={},bulan={};
+ S.visits.forEach(function(v){if(!v.date)return;var m=v.date.slice(0,7),j=tkey(v),w=v.wilayah||'',ks=(v.kat||[]).filter(Boolean);
+  bulan[m]=bulan[m]||{total:0,dianalisis:0,berkategori:0};bulan[m].total++;if(v.note&&v.sum)bulan[m].dianalisis++;if(ks.length)bulan[m].berkategori++;
+  ks.forEach(function(k){var id=m+'|'+j+'|'+k+'|'+w;rows[id]=(rows[id]||0)+1})});
+ return{versi:1,perBulan:bulan,baris:Object.keys(rows).sort().map(function(id){var p=id.split('|');return{bulan:p[0],jenis:p[1],kategori:p[2],wilayah:p[3],jumlah:rows[id]}})}}
+function autoAgg(){
+ if(aggStarted||role!=='editor'||!S.visits.length)return;aggStarted=true;
+ setTimeout(function(){var a=aggPelayanan(),sig=JSON.stringify(a);
+  if(lsGet(AGK)===sig)return; // tidak ada perubahan sejak kiriman terakhir
+  user.getIdToken().then(function(tk){return fetch('/api/kirim-agregat',{method:'POST',headers:{Authorization:'Bearer '+tk,'Content-Type':'application/json'},body:sig})})
+   .then(function(r){if(r.ok)lsSet(AGK,sig)},function(){})},8000)}
 function bkSize(n){return n>=1048576?nf(n/1048576,1)+' MB':nf(Math.max(1,Math.round(n/1024)))+' KB'}
 function bkCard(){
  var h='<div class="card rise bkc" style="--d:2"><div class="ch" style="flex-wrap:wrap"><div class="chd"><span class="ill">'+ill('week')+'</span><div><h2>Backup</h2><div class="sub">Otomatis sekali sehari saat aplikasi dibuka, disimpan 30 hari. '+(lsGet(BKK)===today()?'Backup hari ini sudah tersimpan.':'Backup hari ini belum ada.')+'</div></div></div>'+
@@ -1440,9 +1456,9 @@ function knownTopics(){return topOf(topicCount(S.visits),40).map(function(x){ret
 function analyze(note,cb){
  var ctl=('AbortController' in window)?new AbortController():null,tm=setTimeout(function(){if(ctl)ctl.abort()},12000);
  fetch('/api/sentiment',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({note:samarkan(note,{nik:0,hp:0,email:0,nomor:0}),known:knownTopics()}),signal:ctl&&ctl.signal})
-  .then(function(r){return r.json()}).then(function(j){clearTimeout(tm);if(j&&{pos:1,neg:1,net:1}[j.sentimen])cb({sent:j.sentimen,by:'ai',sum:j.ringkas||'',topics:Array.isArray(j.topik)?j.topik:[]});else cb(null)},function(){clearTimeout(tm);cb(null)})}
+  .then(function(r){return r.json()}).then(function(j){clearTimeout(tm);if(j&&{pos:1,neg:1,net:1}[j.sentimen])cb({sent:j.sentimen,by:'ai',sum:j.ringkas||'',topics:Array.isArray(j.topik)?j.topik:[],kat:Array.isArray(j.kategori)?j.kategori:[]});else cb(null)},function(){clearTimeout(tm);cb(null)})}
 function cloudCard(f){
- var c=topicCount(f),ks=topOf(c,28),noted=f.filter(function(v){return v.note}).length,todo=S.visits.filter(function(v){return v.note&&!v.sum}).length,ed=role==='editor'&&art!==false;
+ var c=topicCount(f),ks=topOf(c,28),noted=f.filter(function(v){return v.note}).length,todo=S.visits.filter(function(v){return v.note&&(!v.sum||!v.kat)}).length,ed=role==='editor'&&art!==false;
  var btn=ed&&todo?'<div class="tpx"><button type="button" class="btn plain" id="tpRun"'+(TP.run?' disabled':'')+'>'+(TP.run?esc(TP.msg):'Analisis '+todo+' catatan lama dengan AI')+'</button></div>':'';
  if(!ks.length)return '<div class="empty">'+(noted?'Catatan belum dianalisis AI. Topik masalah muncul setelah catatan dirangkum.':'Belum ada catatan. Isi kolom catatan saat mencatat konsumen, lalu topik masalahnya muncul di sini.')+'</div>'+btn+(TP.msg&&!TP.run?'<div class="mu" style="margin-top:8px">'+esc(TP.msg)+'</div>':'');
  var mx=ks[0][1],mn=ks[ks.length-1][1],ord=[];ks.forEach(function(x,i){if(i%2)ord.push(x);else ord.unshift(x)});
@@ -1453,10 +1469,10 @@ function cloudCard(f){
  return h+btn}
 function bindTopics(){
  var b=document.getElementById('tpRun');if(!b)return;
- b.onclick=function(){if(TP.run)return;var q=S.visits.filter(function(v){return v.note&&!v.sum}),i=0,ok=0;if(!q.length)return;TP.run=true;
-  function step(){if(i>=q.length){TP.run=false;TP.msg=ok+' dari '+q.length+' catatan berhasil dirangkum.';save();return}
+ b.onclick=function(){if(TP.run)return;var q=S.visits.filter(function(v){return v.note&&(!v.sum||!v.kat)}),i=0,ok=0;if(!q.length)return;TP.run=true;
+  function step(){if(i>=q.length){TP.run=false;TP.msg=ok+' dari '+q.length+' catatan berhasil dirangkum.';save();aggStarted=false;autoAgg();return}
    var v=q[i++];TP.msg='Menganalisis '+i+' dari '+q.length+'…';var bb=document.getElementById('tpRun');if(bb){bb.disabled=true;bb.textContent=TP.msg}
-   analyze(v.note,function(a){if(a){ok++;v.sum=a.sum;v.topics=a.topics;if(v.sentBy!=='manual'){v.sent=a.sent;v.sentBy='ai'}v.u=Date.now()}setTimeout(step,600)})}
+   analyze(v.note,function(a){if(a){ok++;v.sum=a.sum;v.topics=a.topics;v.kat=a.kat;if(v.sentBy!=='manual'){v.sent=a.sent;v.sentBy='ai'}v.u=Date.now()}setTimeout(step,600)})}
   step()}}
 /* ---------- tooltip & resize ---------- */
 (function(){
@@ -1493,7 +1509,7 @@ function bind(){
    if(!x.note){done();return}
    if(!navigator.onLine){if(!man){x.sent=lexSent(x.note);x.sentBy='kata'}done();return}
    var sb=fv.querySelector('button[type=submit]');if(sb){sb.disabled=true;sb.textContent='AI merangkum catatan…'}
-   analyze(x.note,function(a){if(a){x.sum=a.sum;x.topics=a.topics;if(!man){x.sent=a.sent;x.sentBy='ai'}}else if(!man){x.sent=lexSent(x.note);x.sentBy='kata'}done()})}}
+   analyze(x.note,function(a){if(a){x.sum=a.sum;x.topics=a.topics;x.kat=a.kat;if(!man){x.sent=a.sent;x.sentBy='ai'}}else if(!man){x.sent=lexSent(x.note);x.sentBy='kata'}done()})}}
  var fe=document.getElementById('addE');
  if(fe)fe.onsubmit=function(ev){ev.preventDefault();var x=Object.fromEntries(new FormData(fe));x.participants=+x.participants;x.duration=+x.duration;x.id=rid();x.u=Date.now();S.edu.push(x);sortE();flash='Tersimpan: '+x.topic+' di '+x.location+', '+x.participants+' peserta.';save()};
  document.querySelectorAll('[data-delv]').forEach(function(b){b.onclick=function(){askDel(b,function(){var d=S.visits.splice(+b.dataset.delv,1)[0];if(d&&d.id)S.tomb[d.id]=Date.now();save()})}});
@@ -1578,7 +1594,7 @@ function startSubs(){
   unsub.push(Fs.onSnapshot(Fs.collection(fb.db,name),{includeMetadataChanges:true},function(q){
    var map={},arr=[];q.forEach(function(d){var x=d.data();x.id=d.id;arr.push(x);map[d.id]=stab(x)});
    if(name==='visits'){snapV=map;S.visits=arr;sortV()}else{snapE=map;S.edu=arr;sortE()}
-   got[name]=q.metadata.fromCache?1:2;cloudOk=got.visits===2&&got.edu===2;if(cloudOk)autoBk();
+   got[name]=q.metadata.fromCache?1:2;cloudOk=got.visits===2&&got.edu===2;if(cloudOk){autoBk();autoAgg()}
    if(got.visits&&got.edu){if(!migChecked){if(cloudOk)migrate();else if(!busy())render()}else{cacheLocal();if(!busy())render()}}
   },function(e){fsErr=fbMsg(e);render()}))}
  sub('visits');sub('edu');
