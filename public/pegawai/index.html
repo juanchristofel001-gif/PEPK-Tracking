@@ -1300,11 +1300,13 @@ function autoBk(){
 // Wilayah = kab/kota dan kecamatan domisili konsumen (kosong kalau tidak diketahui).
 var AGK=KEY+'.agg',aggStarted=false;
 function aggPelayanan(){
- var rows={},bulan={};
+ var rows={},bulan={},lay={}; // lay = jumlah layanan (bukan penyebutan) yang punya kategori
  S.visits.forEach(function(v){if(!v.date)return;var m=v.date.slice(0,7),j=tkey(v),w=(v.kab||'')+'|'+(v.kec||''),ks=(v.kat||[]).filter(Boolean);
   bulan[m]=bulan[m]||{total:0,dianalisis:0,berkategori:0};bulan[m].total++;if(v.note&&v.sum)bulan[m].dianalisis++;if(ks.length)bulan[m].berkategori++;
+  if(ks.length){var lid=m+'|'+j+'|'+w;lay[lid]=(lay[lid]||0)+1}
   ks.forEach(function(k){var id=m+'|'+j+'|'+k+'|'+w;rows[id]=(rows[id]||0)+1})});
- return{versi:2,perBulan:bulan,baris:Object.keys(rows).sort().map(function(id){var p=id.split('|');return{bulan:p[0],jenis:p[1],kategori:p[2],kab:p[3],kec:p[4],jumlah:rows[id]}})}}
+ return{versi:2,perBulan:bulan,baris:Object.keys(rows).sort().map(function(id){var p=id.split('|');return{bulan:p[0],jenis:p[1],kategori:p[2],kab:p[3],kec:p[4],jumlah:rows[id]}}),
+  layanan:Object.keys(lay).sort().map(function(id){var p=id.split('|');return{bulan:p[0],jenis:p[1],kab:p[2],kec:p[3],jumlah:lay[id]}})}}
 function autoAgg(){
  if(aggStarted||role!=='editor'||!S.visits.length)return;aggStarted=true;
  setTimeout(function(){var a=aggPelayanan(),sig=JSON.stringify(a);

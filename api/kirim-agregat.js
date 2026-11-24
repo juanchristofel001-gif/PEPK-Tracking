@@ -30,7 +30,17 @@ function bersihkan(a) {
     const kec = kab && /^[A-Za-z ]{2,40}$/.test(String(r.kec || '')) ? String(r.kec) : '';
     baris.push({ bulan: r.bulan, jenis: r.jenis, kategori: r.kategori, kab, kec, jumlah: n });
   }
-  return { versi: 2, perBulan, baris };
+  // Jumlah layanan berkategori (bukan penyebutan), untuk menghitung "% pengaduan tentang topik X".
+  const layanan = [];
+  for (const r of (Array.isArray(a.layanan) ? a.layanan : []).slice(0, 20000)) {
+    if (!r || !bulanOk(r.bulan) || !JENIS.includes(r.jenis)) continue;
+    const n = angka(r.jumlah);
+    if (!n) continue;
+    const kab = KAB.includes(r.kab) ? r.kab : '';
+    const kec = kab && /^[A-Za-z ]{2,40}$/.test(String(r.kec || '')) ? String(r.kec) : '';
+    layanan.push({ bulan: r.bulan, jenis: r.jenis, kab, kec, jumlah: n });
+  }
+  return { versi: 2, perBulan, baris, layanan };
 }
 
 module.exports = async (req, res) => {
