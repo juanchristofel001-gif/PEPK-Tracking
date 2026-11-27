@@ -1,0 +1,1257 @@
+{
+  "judul": "Perusahaan Fintech Lending (LPBBTI/Pindar) Berizin OJK",
+  "per_tanggal": "2026-08-14",
+  "sumber": "https://ojk.go.id/id/kanal/iknb/data-dan-statistik/direktori/fintech/Pages/Direktori-LPBBTI-Agustus-2026.aspx",
+  "sumber_nama_sebelumnya": [
+    "https://www.ojk.go.id/id/kanal/iknb/data-dan-statistik/direktori/fintech/Pages/Direktori-LPBBTI-per-2-Maret-2026.aspx",
+    "https://ojk.go.id/id/kanal/iknb/data-dan-statistik/direktori/fintech/Pages/Direktori-LPBBTI-13-Februari-2026.aspx"
+  ],
+  "jumlah": 94,
+  "data": [
+    {
+      "no": 1,
+      "nama_perusahaan": "PT Pasar Dana Pinjaman",
+      "nama_aplikasi": "Danamas",
+      "izin": {
+        "nomor": "KEP-49/D.05/2017",
+        "tanggal": "06 Juli 2017"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "https://p2p.danamas.co.id/",
+      "domain": "p2p.danamas.co.id",
+      "sistem_operasi": "Android"
+    },
+    {
+      "no": 2,
+      "nama_perusahaan": "PT Amartha Mikro Fintek",
+      "nama_aplikasi": "Amartha",
+      "izin": {
+        "nomor": "KEP-46/D.05/2019",
+        "tanggal": "13 Mei 2019"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "https://amartha.com/",
+      "domain": "amartha.com",
+      "sistem_operasi": "Android"
+    },
+    {
+      "no": 3,
+      "nama_perusahaan": "PT Indo Fin Tek",
+      "nama_aplikasi": "Dompet Kilat",
+      "izin": {
+        "nomor": "KEP-47/D.05/2019",
+        "tanggal": "13 Mei 2019"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "https://dompetkilat.co.id/",
+      "domain": "dompetkilat.co.id",
+      "sistem_operasi": "Android"
+    },
+    {
+      "no": 4,
+      "nama_perusahaan": "PT Creative Mobile Adventure",
+      "nama_aplikasi": "Boost",
+      "izin": {
+        "nomor": "KEP-48/D.05/2019",
+        "tanggal": "13 Mei 2019"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "https://www.myboost.co.id",
+      "domain": "myboost.co.id",
+      "sistem_operasi": null
+    },
+    {
+      "no": 5,
+      "nama_perusahaan": "PT Toko Modal Mitra Usaha",
+      "nama_aplikasi": "Tokomodal",
+      "izin": {
+        "nomor": "KEP-49/D.05/2019",
+        "tanggal": "24 Mei 2019"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "https://www.tokomodal.co.id/",
+      "domain": "tokomodal.co.id",
+      "sistem_operasi": "Android"
+    },
+    {
+      "no": 6,
+      "nama_perusahaan": "PT Mitrausaha Indonesia Grup",
+      "nama_aplikasi": "Modalku",
+      "izin": {
+        "nomor": "KEP-81/D.05/2019",
+        "tanggal": "30 September 2019"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "https://modalku.co.id/",
+      "domain": "modalku.co.id",
+      "sistem_operasi": "Android"
+    },
+    {
+      "no": 7,
+      "nama_perusahaan": "PT Pendanaan Teknologi Nusa",
+      "nama_aplikasi": "KTA Kilat",
+      "izin": {
+        "nomor": "KEP-82/D.05/2019",
+        "tanggal": "30 September 2019"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "https://www.pendanaan.com/",
+      "domain": "pendanaan.com",
+      "sistem_operasi": "Android & iOS"
+    },
+    {
+      "no": 8,
+      "nama_perusahaan": "PT Kredit Pintar Indonesia",
+      "nama_aplikasi": "Kredit Pintar",
+      "izin": {
+        "nomor": "KEP-83/D.05/2019",
+        "tanggal": "30 September 2019"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "https://www.kreditpintar.com/",
+      "domain": "kreditpintar.com",
+      "sistem_operasi": "Android"
+    },
+    {
+      "no": 9,
+      "nama_perusahaan": "PT Oriente Mas Sejahtera",
+      "nama_aplikasi": "Finmas",
+      "izin": {
+        "nomor": "KEP-85/D.05/2019",
+        "tanggal": "30 September 2019"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "www.finmas.co.id",
+      "domain": "finmas.co.id",
+      "sistem_operasi": "Android"
+    },
+    {
+      "no": 10,
+      "nama_perusahaan": "PT Aman Cermat Cepat",
+      "nama_aplikasi": "KlikA2C",
+      "izin": {
+        "nomor": "KEP-87/D.05/2019",
+        "tanggal": "30 September 2019"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "https://klika2c.co.id",
+      "domain": "klika2c.co.id",
+      "sistem_operasi": "Android"
+    },
+    {
+      "no": 11,
+      "nama_perusahaan": "PT Akseleran Keuangan Inklusif Indonesia",
+      "nama_aplikasi": "Akseleran",
+      "izin": {
+        "nomor": "KEP-122/D.05/2019",
+        "tanggal": "13 Desember 2019"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "https://www.akseleran.co.id/",
+      "domain": "akseleran.co.id",
+      "sistem_operasi": "Android"
+    },
+    {
+      "no": 12,
+      "nama_perusahaan": "PT Ammana Fintek Syariah",
+      "nama_aplikasi": "Ammana",
+      "izin": {
+        "nomor": "KEP-123/D.05/2019",
+        "tanggal": "13 Desember 2019"
+      },
+      "jenis_usaha": "Syariah",
+      "website": "https://ammana.id/",
+      "domain": "ammana.id",
+      "sistem_operasi": "Android & iOS"
+    },
+    {
+      "no": 13,
+      "nama_perusahaan": "PT Dana Pinjaman Inklusif",
+      "nama_aplikasi": "PinjamanGo",
+      "izin": {
+        "nomor": "KEP-124/D.05/2019",
+        "tanggal": "13 Desember 2019"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "https://pinjamango.co.id",
+      "domain": "pinjamango.co.id",
+      "sistem_operasi": "Android & iOS"
+    },
+    {
+      "no": 14,
+      "nama_perusahaan": "PT Lunaria Annua Teknologi",
+      "nama_aplikasi": "KoinP2P",
+      "izin": {
+        "nomor": "KEP-125/D.05/2019",
+        "tanggal": "13 Desember 2019"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "https://koinp2p.com/",
+      "domain": "koinp2p.com",
+      "sistem_operasi": null
+    },
+    {
+      "no": 15,
+      "nama_perusahaan": "PT Pohon Dana Indonesia",
+      "nama_aplikasi": "Pohondana",
+      "izin": {
+        "nomor": "KEP-126/D.05/2019",
+        "tanggal": "13 Desember 2019"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "https://pohondana.id/",
+      "domain": "pohondana.id",
+      "sistem_operasi": null
+    },
+    {
+      "no": 16,
+      "nama_perusahaan": "PT Mekar InvestamaTeknologi",
+      "nama_aplikasi": "Mekar",
+      "izin": {
+        "nomor": "KEP-127/D.05/2019",
+        "tanggal": "13 Desember 2019"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "https://mekar.id",
+      "domain": "mekar.id",
+      "sistem_operasi": null
+    },
+    {
+      "no": 17,
+      "nama_perusahaan": "PT Pembiayaan Digital Indonesia",
+      "nama_aplikasi": "AdaKami",
+      "izin": {
+        "nomor": "KEP-128/D.05/2019",
+        "tanggal": "13 Desember 2019"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "https://www.adakami.id/",
+      "domain": "adakami.id",
+      "sistem_operasi": "Android & iOS"
+    },
+    {
+      "no": 18,
+      "nama_perusahaan": "PT Esta Kapital Fintek",
+      "nama_aplikasi": "Esta Kapital",
+      "izin": {
+        "nomor": "KEP-129/D.05/2019",
+        "tanggal": "13 Desember 2019"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "www.estakapital.co.id",
+      "domain": "estakapital.co.id",
+      "sistem_operasi": null
+    },
+    {
+      "no": 19,
+      "nama_perusahaan": "PT Tri Digi Fin",
+      "nama_aplikasi": "KreditPro",
+      "izin": {
+        "nomor": "KEP-130/D.05/2019",
+        "tanggal": "13 Desember 2019"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "www.kreditpro.id",
+      "domain": "kreditpro.id",
+      "sistem_operasi": null
+    },
+    {
+      "no": 20,
+      "nama_perusahaan": "PT Fintegra Homido Indonesia",
+      "nama_aplikasi": "FINTAG",
+      "izin": {
+        "nomor": "KEP-131/D.05/2019",
+        "tanggal": "13 Desember 2019"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "https://fintag.id",
+      "domain": "fintag.id",
+      "sistem_operasi": null
+    },
+    {
+      "no": 21,
+      "nama_perusahaan": "PT Kredit Utama Fintech Indonesia",
+      "nama_aplikasi": "RupiahCepat",
+      "izin": {
+        "nomor": "KEP-132/D.05/2019",
+        "tanggal": "13 Desember 2019"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "https://www.rupiahcepat.co.id/",
+      "domain": "rupiahcepat.co.id",
+      "sistem_operasi": "Android"
+    },
+    {
+      "no": 22,
+      "nama_perusahaan": "PT Mediator Komunitas Indonesia",
+      "nama_aplikasi": "Crowdo",
+      "izin": {
+        "nomor": "KEP-133/D.05/2019",
+        "tanggal": "13 Desember 2019"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "https://crowdo.co.id/",
+      "domain": "crowdo.co.id",
+      "sistem_operasi": "Android"
+    },
+    {
+      "no": 23,
+      "nama_perusahaan": "PT Artha Dana Teknologi",
+      "nama_aplikasi": "Indodana",
+      "izin": {
+        "nomor": "KEP-15/D.05/2020",
+        "tanggal": "19 Mei 2020"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "https://www.indodanafintech.id",
+      "domain": "indodanafintech.id",
+      "sistem_operasi": "Android & iOS"
+    },
+    {
+      "no": 24,
+      "nama_perusahaan": "PT JULO Teknologi Finansial",
+      "nama_aplikasi": "JULO",
+      "izin": {
+        "nomor": "KEP-16/D.05/2020",
+        "tanggal": "19 Mei 2020"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "https://www.julo.co.id/",
+      "domain": "julo.co.id",
+      "sistem_operasi": "Android"
+    },
+    {
+      "no": 25,
+      "nama_perusahaan": "PT Progo Puncak Group",
+      "nama_aplikasi": "Pinjamin",
+      "izin": {
+        "nomor": "KEP-17/D.05/2020",
+        "tanggal": "19 Mei 2020"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "https://pinjamwinwin.com/",
+      "domain": "pinjamwinwin.com",
+      "sistem_operasi": "Android & iOS"
+    },
+    {
+      "no": 26,
+      "nama_perusahaan": "PT Pindar Berbagi Bersama",
+      "nama_aplikasi": "DanaKredi",
+      "nama_sebelumnya": {
+        "aplikasi": [
+          "DanaRupiah"
+        ],
+        "perusahaan": [
+          "PT Layanan Keuangan Berbagi"
+        ]
+      },
+      "izin": {
+        "nomor": "KEP-18/D.05/2020",
+        "tanggal": "19 Mei 2020"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "https://www.danakredi.com/",
+      "domain": "danakredi.com",
+      "sistem_operasi": "Android & iOS"
+    },
+    {
+      "no": 27,
+      "nama_perusahaan": "PT Indonusa Bara Sejahtera",
+      "nama_aplikasi": "OVO Finansial",
+      "izin": {
+        "nomor": "KEP-19/D.05/2020",
+        "tanggal": "19 Mei 2020"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "https://ovofinansial.com",
+      "domain": "ovofinansial.com",
+      "sistem_operasi": null
+    },
+    {
+      "no": 28,
+      "nama_perusahaan": "PT Finansial Integrasi Teknologi",
+      "nama_aplikasi": "PinjamModal",
+      "izin": {
+        "nomor": "KEP-20/D.05/2020",
+        "tanggal": "19 Mei 2020"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "https://pinjammodal.id/",
+      "domain": "pinjammodal.id",
+      "sistem_operasi": "Android & iOS"
+    },
+    {
+      "no": 29,
+      "nama_perusahaan": "PT Alami Fintek Sharia",
+      "nama_aplikasi": "Alami",
+      "izin": {
+        "nomor": "KEP-21/D.05/2020",
+        "tanggal": "27 Mei 2020"
+      },
+      "jenis_usaha": "Syariah",
+      "website": "https://alamisharia.co.id/",
+      "domain": "alamisharia.co.id",
+      "sistem_operasi": "Android & iOS"
+    },
+    {
+      "no": 30,
+      "nama_perusahaan": "PT Simplefi Teknologi Indonesia",
+      "nama_aplikasi": "AwanTunai",
+      "izin": {
+        "nomor": "KEP-22/D.05/2020",
+        "tanggal": "27 Mei 2020"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "https://awantunai.co.id/",
+      "domain": "awantunai.co.id",
+      "sistem_operasi": "Android"
+    },
+    {
+      "no": 31,
+      "nama_perusahaan": "PT Dana Kini Indonesia",
+      "nama_aplikasi": "BantuFazz",
+      "izin": {
+        "nomor": "KEP-46/D.05/2020",
+        "tanggal": "16 Oktober 2020"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "www.bantufazz.id",
+      "domain": "bantufazz.id",
+      "sistem_operasi": "Android & iOS"
+    },
+    {
+      "no": 32,
+      "nama_perusahaan": "PT Abadi Sejahtera Finansindo",
+      "nama_aplikasi": "Singa",
+      "izin": {
+        "nomor": "KEP-47/D.05/2020",
+        "tanggal": "16 Oktober 2020"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "https://singa.id/",
+      "domain": "singa.id",
+      "sistem_operasi": "Android"
+    },
+    {
+      "no": 33,
+      "nama_perusahaan": "PT Intekno Raya",
+      "nama_aplikasi": "Danamerdeka",
+      "izin": {
+        "nomor": "KEP-48/D.05/2020",
+        "tanggal": "16 Oktober 2020"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "https://danamerdeka.co.id",
+      "domain": "danamerdeka.co.id",
+      "sistem_operasi": "Android"
+    },
+    {
+      "no": 34,
+      "nama_perusahaan": "PT Indonesia Fintopia Technology",
+      "nama_aplikasi": "Easycash",
+      "izin": {
+        "nomor": "KEP-49/D.05/2020",
+        "tanggal": "16 Oktober 2020"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "https://www.easycash.id/",
+      "domain": "easycash.id",
+      "sistem_operasi": "Android & iOS"
+    },
+    {
+      "no": 35,
+      "nama_perusahaan": "PT Kuaikuai Tech Indonesia",
+      "nama_aplikasi": "Pinjamyuk",
+      "izin": {
+        "nomor": "KEP-2/D.05/2021",
+        "tanggal": "06 Januari 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "https://www.pinjamyuk.co.id/",
+      "domain": "pinjamyuk.co.id",
+      "sistem_operasi": "Android"
+    },
+    {
+      "no": 36,
+      "nama_perusahaan": "PT Rezeki Bersama Teknologi",
+      "nama_aplikasi": "Finplus",
+      "izin": {
+        "nomor": "KEP-3/D.05/2021",
+        "tanggal": "06 Januari 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "https://finplus.co.id/",
+      "domain": "finplus.co.id",
+      "sistem_operasi": null
+    },
+    {
+      "no": 37,
+      "nama_perusahaan": "PT Uangme Fintek Indonesia",
+      "nama_aplikasi": "Uangme",
+      "izin": {
+        "nomor": "KEP-4/D.05/2021",
+        "tanggal": "06 Januari 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "https://www.uangme.id/",
+      "domain": "uangme.id",
+      "sistem_operasi": "Android & iOS"
+    },
+    {
+      "no": 38,
+      "nama_perusahaan": "PT Stanford Teknologi Indonesia",
+      "nama_aplikasi": "PinjamDuit",
+      "izin": {
+        "nomor": "KEP-5/D.05/2021",
+        "tanggal": "06 Januari 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "https://pinjamduit.co.id/",
+      "domain": "pinjamduit.co.id",
+      "sistem_operasi": "Android & iOS"
+    },
+    {
+      "no": 39,
+      "nama_perusahaan": "PT Dana Syariah Indonesia",
+      "nama_aplikasi": "DANA SYARIAH",
+      "izin": {
+        "nomor": "KEP-10/D.05/2021",
+        "tanggal": "23 Februari 2021"
+      },
+      "jenis_usaha": "Syariah",
+      "website": "http://danasyariah.id",
+      "domain": "danasyariah.id",
+      "sistem_operasi": "Android"
+    },
+    {
+      "no": 40,
+      "nama_perusahaan": "PT Berdayakan Usaha Indonesia",
+      "nama_aplikasi": "BATUMBU",
+      "izin": {
+        "nomor": "KEP-11/D.05/2021",
+        "tanggal": "23 Februari 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "www.batumbu.id",
+      "domain": "batumbu.id",
+      "sistem_operasi": null
+    },
+    {
+      "no": 41,
+      "nama_perusahaan": "PT Artha Permata Makmur",
+      "nama_aplikasi": "Cashcepat",
+      "izin": {
+        "nomor": "KEP-12/D.05/2021",
+        "tanggal": "23 Februari 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "http://cashcepat.id",
+      "domain": "cashcepat.id",
+      "sistem_operasi": "Android"
+    },
+    {
+      "no": 42,
+      "nama_perusahaan": "PT Pinjaman Kemakmuran Rakyat",
+      "nama_aplikasi": "klikUMKM",
+      "izin": {
+        "nomor": "KEP-13/D.05/2021",
+        "tanggal": "23 Februari 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "www.klikUMKM.co.id",
+      "domain": "klikumkm.co.id",
+      "sistem_operasi": null
+    },
+    {
+      "no": 43,
+      "nama_perusahaan": "PT Kredit Plus Teknologi",
+      "nama_aplikasi": "Pinjam Gampang",
+      "izin": {
+        "nomor": "KEP-16/D.05/2021",
+        "tanggal": "16 Maret 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "http://www.kreditplusteknologi.id",
+      "domain": "kreditplusteknologi.id",
+      "sistem_operasi": "Android"
+    },
+    {
+      "no": 44,
+      "nama_perusahaan": "PT Cicil Solusi Mitra Teknologi",
+      "nama_aplikasi": "cicil",
+      "izin": {
+        "nomor": "KEP-20/D.05/2021",
+        "tanggal": "14 April 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "https://www.cicil.co.id",
+      "domain": "cicil.co.id",
+      "sistem_operasi": "Android"
+    },
+    {
+      "no": 45,
+      "nama_perusahaan": "PT Lumbung Dana Indonesia",
+      "nama_aplikasi": "RpDana",
+      "izin": {
+        "nomor": "KEP-21/D.05/2021",
+        "tanggal": "14 April 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "http://rpdana.co.id",
+      "domain": "rpdana.co.id",
+      "sistem_operasi": "Android & iOS"
+    },
+    {
+      "no": 46,
+      "nama_perusahaan": "PT Inovasi Terdepan Nusantara",
+      "nama_aplikasi": "KrediOne",
+      "nama_sebelumnya": {
+        "aplikasi": [
+          "360Kredi"
+        ]
+      },
+      "izin": {
+        "nomor": "KEP-22/D.05/2021",
+        "tanggal": "14 April 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "www.360kredi.id",
+      "domain": "360kredi.id",
+      "sistem_operasi": "Android"
+    },
+    {
+      "no": 47,
+      "nama_perusahaan": "PT Kreditku Teknologi Indonesia",
+      "nama_aplikasi": "Kredinesia",
+      "izin": {
+        "nomor": "KEP-25/D.05/2021",
+        "tanggal": "21 April 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "www.kredinesia.id",
+      "domain": "kredinesia.id",
+      "sistem_operasi": "Android & iOS"
+    },
+    {
+      "no": 48,
+      "nama_perusahaan": "PT Pinduit Teknologi Indonesia",
+      "nama_aplikasi": "Pintek",
+      "izin": {
+        "nomor": "KEP-26/D.05/2021",
+        "tanggal": "21 April 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "http://pintek.id",
+      "domain": "pintek.id",
+      "sistem_operasi": null
+    },
+    {
+      "no": 49,
+      "nama_perusahaan": "PT Modal Rakyat Indonesia",
+      "nama_aplikasi": "ModalRakyat",
+      "izin": {
+        "nomor": "KEP-27/D.05/2021",
+        "tanggal": "21 April 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "http://modalrakyat.id",
+      "domain": "modalrakyat.id",
+      "sistem_operasi": "Android & iOS"
+    },
+    {
+      "no": 50,
+      "nama_perusahaan": "PT Anugerah Digital Indonesia",
+      "nama_aplikasi": "SOLUSIKU",
+      "izin": {
+        "nomor": "KEP-28/D.05/2021",
+        "tanggal": "21 April 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "www.solusi-ku.id",
+      "domain": "solusi-ku.id",
+      "sistem_operasi": "Android & iOS"
+    },
+    {
+      "no": 51,
+      "nama_perusahaan": "PT Idana Solusi Sejahtera",
+      "nama_aplikasi": "Cairin",
+      "izin": {
+        "nomor": "KEP-29/D.05/2021",
+        "tanggal": "21 April 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "www.cairin.id",
+      "domain": "cairin.id",
+      "sistem_operasi": "Android & iOS"
+    },
+    {
+      "no": 52,
+      "nama_perusahaan": "PT Trust Teknologi Finansial",
+      "nama_aplikasi": "Danaku",
+      "nama_sebelumnya": {
+        "aplikasi": [
+          "TrustIQ"
+        ]
+      },
+      "izin": {
+        "nomor": "KEP-30/D.05/2021",
+        "tanggal": "21 April 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "http://danaku.id",
+      "domain": "danaku.id",
+      "sistem_operasi": "Android & iOS"
+    },
+    {
+      "no": 53,
+      "nama_perusahaan": "PT Harapan Fintech Indonesia",
+      "nama_aplikasi": "KLIK KAMI",
+      "izin": {
+        "nomor": "KEP-31/D.05/2021",
+        "tanggal": "21 April 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "www.klikkami.co.id",
+      "domain": "klikkami.co.id",
+      "sistem_operasi": "Android & iOS"
+    },
+    {
+      "no": 54,
+      "nama_perusahaan": "PT Duha Madani Syariah",
+      "nama_aplikasi": "Duha SYARIAH",
+      "izin": {
+        "nomor": "KEP-32/D.05/2021",
+        "tanggal": "21 April 2021"
+      },
+      "jenis_usaha": "Syariah",
+      "website": "www.duhasyariah.com",
+      "domain": "duhasyariah.com",
+      "sistem_operasi": "Android"
+    },
+    {
+      "no": 55,
+      "nama_perusahaan": "PT Sol Mitra Fintec",
+      "nama_aplikasi": "Invoila",
+      "izin": {
+        "nomor": "KEP-39/D.05/2021",
+        "tanggal": "11 Mei 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "http://invoila.co.id",
+      "domain": "invoila.co.id",
+      "sistem_operasi": "Android"
+    },
+    {
+      "no": 56,
+      "nama_perusahaan": "PT Satustop Finansial Solusi",
+      "nama_aplikasi": "Sanders One Stop Solution",
+      "izin": {
+        "nomor": "KEP-40/D.05/2021",
+        "tanggal": "11 Mei 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "http://sanders.co.id",
+      "domain": "sanders.co.id",
+      "sistem_operasi": null
+    },
+    {
+      "no": 57,
+      "nama_perusahaan": "PT Dana Bagus Indonesia",
+      "nama_aplikasi": "DanaBagus",
+      "izin": {
+        "nomor": "KEP-41/D.05/2021",
+        "tanggal": "11 Mei 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "www.danabagus.id",
+      "domain": "danabagus.id",
+      "sistem_operasi": "Android"
+    },
+    {
+      "no": 58,
+      "nama_perusahaan": "PT Teknologi Merlin Sejahtera",
+      "nama_aplikasi": "UKU",
+      "izin": {
+        "nomor": "KEP-46/D.05/2021",
+        "tanggal": "2 Juni 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "ukuindo.com",
+      "domain": "ukuindo.com",
+      "sistem_operasi": "Android"
+    },
+    {
+      "no": 59,
+      "nama_perusahaan": "PT Fintek Digital Indonesia",
+      "nama_aplikasi": "KREDITO",
+      "izin": {
+        "nomor": "KEP-47/D.05/2021",
+        "tanggal": "2 Juni 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "https://kredito.id",
+      "domain": "kredito.id",
+      "sistem_operasi": "Android & iOS"
+    },
+    {
+      "no": 60,
+      "nama_perusahaan": "PT Info Tekno Siaga",
+      "nama_aplikasi": "AdaPundi",
+      "izin": {
+        "nomor": "KEP-48/D.05/2021",
+        "tanggal": "2 Juni 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "www.adapundi.com",
+      "domain": "adapundi.com",
+      "sistem_operasi": "Android & iOS"
+    },
+    {
+      "no": 61,
+      "nama_perusahaan": "PT Lentera Dana Nusantara",
+      "nama_aplikasi": "Lentera Dana Nusantara",
+      "izin": {
+        "nomor": "KEP-49/D.05/2021",
+        "tanggal": "2 Juni 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "www.lenteradana.co.id/lender/",
+      "domain": "lenteradana.co.id",
+      "sistem_operasi": "Android"
+    },
+    {
+      "no": 62,
+      "nama_perusahaan": "PT Solusi Teknologi Finansial",
+      "nama_aplikasi": "Modal Nasional",
+      "izin": {
+        "nomor": "KEP-50/D.05/2021",
+        "tanggal": "2 Juni 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "www.modalnasional.co.id",
+      "domain": "modalnasional.co.id",
+      "sistem_operasi": "Android & iOS"
+    },
+    {
+      "no": 63,
+      "nama_perusahaan": "PT Komunal Finansial Indonesia",
+      "nama_aplikasi": "Komunal",
+      "izin": {
+        "nomor": "KEP-51/D.05/2021",
+        "tanggal": "2 Juni 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "www.komunal.co.id",
+      "domain": "komunal.co.id",
+      "sistem_operasi": "Android & iOS"
+    },
+    {
+      "no": 64,
+      "nama_perusahaan": "PT Cerita Teknologi Indonesia",
+      "nama_aplikasi": "Restock.ID",
+      "izin": {
+        "nomor": "KEP-52/D.05/2021",
+        "tanggal": "2 Juni 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "www.restock.id",
+      "domain": "restock.id",
+      "sistem_operasi": null
+    },
+    {
+      "no": 65,
+      "nama_perusahaan": "PT Grha Dana Bersama",
+      "nama_aplikasi": "Avantee",
+      "izin": {
+        "nomor": "KEP-66/D.05/2021",
+        "tanggal": "2 Agustus 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "www.avantee.co.id",
+      "domain": "avantee.co.id",
+      "sistem_operasi": null
+    },
+    {
+      "no": 66,
+      "nama_perusahaan": "PT Gradana Teknoruci Indonesia",
+      "nama_aplikasi": "Gradana",
+      "izin": {
+        "nomor": "KEP-67/D.05/2021",
+        "tanggal": "2 Agustus 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "gradana.co.id",
+      "domain": "gradana.co.id",
+      "sistem_operasi": null
+    },
+    {
+      "no": 67,
+      "nama_perusahaan": "PT Inclusive Finance Group",
+      "nama_aplikasi": "Danacita",
+      "izin": {
+        "nomor": "KEP-68/D.05/2021",
+        "tanggal": "2 Agustus 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "www.danacita.co.id",
+      "domain": "danacita.co.id",
+      "sistem_operasi": null
+    },
+    {
+      "no": 68,
+      "nama_perusahaan": "PT IKI Karunia Indonesia",
+      "nama_aplikasi": "Pijar",
+      "nama_sebelumnya": {
+        "aplikasi": [
+          "IKI Modal"
+        ]
+      },
+      "izin": {
+        "nomor": "KEP-69/D.05/2021",
+        "tanggal": "2 Agustus 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "www.pijar.com",
+      "domain": "pijar.com",
+      "sistem_operasi": null
+    },
+    {
+      "no": 69,
+      "nama_perusahaan": "PT Finansia Aira Teknologi",
+      "nama_aplikasi": "Ivoji",
+      "izin": {
+        "nomor": "KEP-73/D.05/2021",
+        "tanggal": "19 Agustus 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "www.ivoji.id",
+      "domain": "ivoji.id",
+      "sistem_operasi": "Android & iOS"
+    },
+    {
+      "no": 70,
+      "nama_perusahaan": "PT Bursa Akselerasi Indonesia",
+      "nama_aplikasi": "Indofund.id",
+      "izin": {
+        "nomor": "KEP-74/D.05/2021",
+        "tanggal": "19 Agustus 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "indofund.id",
+      "domain": "indofund.id",
+      "sistem_operasi": null
+    },
+    {
+      "no": 71,
+      "nama_perusahaan": "PT LinkAja Modalin Nusantara",
+      "nama_aplikasi": "iGrow",
+      "izin": {
+        "nomor": "KEP-75/D.05/2021",
+        "tanggal": "19 Agustus 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "igrow.asia",
+      "domain": "igrow.asia",
+      "sistem_operasi": "Android & iOS"
+    },
+    {
+      "no": 72,
+      "nama_perusahaan": "PT Adiwisista Finansial Teknologi",
+      "nama_aplikasi": "Danai.id",
+      "izin": {
+        "nomor": "KEP-76/D.05/2021",
+        "tanggal": "19 Agustus 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "http://danai.id",
+      "domain": "danai.id",
+      "sistem_operasi": "Android & iOS"
+    },
+    {
+      "no": 73,
+      "nama_perusahaan": "PT Fidac Inovasi Teknologi",
+      "nama_aplikasi": "DUMI",
+      "izin": {
+        "nomor": "KEP-78/D.05/2021",
+        "tanggal": "24 Agustus 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "minjem.com",
+      "domain": "minjem.com",
+      "sistem_operasi": "Android & iOS"
+    },
+    {
+      "no": 74,
+      "nama_perusahaan": "PT Lampung Berkah Finansial Teknologi",
+      "nama_aplikasi": "LAHAN SIKAM",
+      "izin": {
+        "nomor": "KEP-79/D.05/2021",
+        "tanggal": "24 Agustus 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "www.lahansikam.co.id",
+      "domain": "lahansikam.co.id",
+      "sistem_operasi": null
+    },
+    {
+      "no": 75,
+      "nama_perusahaan": "PT Qazwa Mitra Hasanah",
+      "nama_aplikasi": "qazwa.id",
+      "izin": {
+        "nomor": "KEP-80/D.05/2021",
+        "tanggal": "24 Agustus 2021"
+      },
+      "jenis_usaha": "Syariah",
+      "website": "qazwa.id",
+      "domain": "qazwa.id",
+      "sistem_operasi": null
+    },
+    {
+      "no": 76,
+      "nama_perusahaan": "PT KrediFazz Digital Indonesia",
+      "nama_aplikasi": "KrediFazz",
+      "izin": {
+        "nomor": "KEP-81/D.05/2021",
+        "tanggal": "24 Agustus 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "www.kredifazz.id",
+      "domain": "kredifazz.id",
+      "sistem_operasi": "Android"
+    },
+    {
+      "no": 77,
+      "nama_perusahaan": "PT Doeku Peduli Indonesia",
+      "nama_aplikasi": "KreditOK",
+      "izin": {
+        "nomor": "KEP-82/D.05/2021",
+        "tanggal": "24 Agustus 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "kreditok.id",
+      "domain": "kreditok.id",
+      "sistem_operasi": "Android"
+    },
+    {
+      "no": 78,
+      "nama_perusahaan": "PT Aktivaku Investama Teknologi",
+      "nama_aplikasi": "Aktivaku",
+      "izin": {
+        "nomor": "KEP-83/D.05/2021",
+        "tanggal": "24 Agustus 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "aktivaku.com",
+      "domain": "aktivaku.com",
+      "sistem_operasi": null
+    },
+    {
+      "no": 79,
+      "nama_perusahaan": "PT Mulia Inovasi Digital",
+      "nama_aplikasi": "Danain",
+      "izin": {
+        "nomor": "KEP-84/D.05/2021",
+        "tanggal": "24 Agustus 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "www.danain.co.id",
+      "domain": "danain.co.id",
+      "sistem_operasi": "Android & iOS"
+    },
+    {
+      "no": 80,
+      "nama_perusahaan": "PT Indosaku Digital Teknologi",
+      "nama_aplikasi": "Indosaku",
+      "izin": {
+        "nomor": "KEP-86/D.05/2021",
+        "tanggal": "31 Agustus 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "indosaku.id",
+      "domain": "indosaku.id",
+      "sistem_operasi": "Android"
+    },
+    {
+      "no": 81,
+      "nama_perusahaan": "PT Fintech Bina Bangsa",
+      "nama_aplikasi": "EDUFUND",
+      "izin": {
+        "nomor": "KEP-88/D.05/2021",
+        "tanggal": "8 September 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "www.edufund.co.id",
+      "domain": "edufund.co.id",
+      "sistem_operasi": null
+    },
+    {
+      "no": 82,
+      "nama_perusahaan": "PT Kreasi Anak Indonesia",
+      "nama_aplikasi": "GandengTangan",
+      "izin": {
+        "nomor": "KEP-89/D.05/2021",
+        "tanggal": "8 September 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "www.gandengtangan.co.id",
+      "domain": "gandengtangan.co.id",
+      "sistem_operasi": "Android"
+    },
+    {
+      "no": 83,
+      "nama_perusahaan": "PT Piranti Alphabet Perkasa",
+      "nama_aplikasi": "PAPITUPI SYARIAH",
+      "izin": {
+        "nomor": "KEP-90/D.05/2021",
+        "tanggal": "8 September 2021"
+      },
+      "jenis_usaha": "Syariah",
+      "website": "www.papitupisyariah.com",
+      "domain": "papitupisyariah.com",
+      "sistem_operasi": "Android"
+    },
+    {
+      "no": 84,
+      "nama_perusahaan": "PT Smartec Teknologi Indonesia",
+      "nama_aplikasi": "BantuSaku",
+      "izin": {
+        "nomor": "KEP-91/D.05/2021",
+        "tanggal": "8 September 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "bantusaku.id",
+      "domain": "bantusaku.id",
+      "sistem_operasi": "Android"
+    },
+    {
+      "no": 85,
+      "nama_perusahaan": "PT Digital Micro Indonesia",
+      "nama_aplikasi": "danabijak",
+      "izin": {
+        "nomor": "KEP-92/D.05/2021",
+        "tanggal": "8 September 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "danabijak.com",
+      "domain": "danabijak.com",
+      "sistem_operasi": "Android"
+    },
+    {
+      "no": 86,
+      "nama_perusahaan": "PT Solid Fintek Indonesia",
+      "nama_aplikasi": "AdaModal",
+      "izin": {
+        "nomor": "KEP-94/D.05/2021",
+        "tanggal": "8 September 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "www.adamodal.co.id",
+      "domain": "adamodal.co.id",
+      "sistem_operasi": "Android & iOS"
+    },
+    {
+      "no": 87,
+      "nama_perusahaan": "PT Sejahtera Sama Kita",
+      "nama_aplikasi": "SamaKita",
+      "izin": {
+        "nomor": "KEP-95/D.05/2021",
+        "tanggal": "8 September 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "samakita.co.id",
+      "domain": "samakita.co.id",
+      "sistem_operasi": null
+    },
+    {
+      "no": 88,
+      "nama_perusahaan": "PT Kawan Cicil Teknologi Utama",
+      "nama_aplikasi": "KawanCicil",
+      "izin": {
+        "nomor": "KEP-101/D.05/2021",
+        "tanggal": "17 September 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "kawancicil.co.id",
+      "domain": "kawancicil.co.id",
+      "sistem_operasi": "Android & iOS"
+    },
+    {
+      "no": 89,
+      "nama_perusahaan": "PT Klikcair Magga Jaya",
+      "nama_aplikasi": "KlikCair",
+      "izin": {
+        "nomor": "KEP-103/D.05/2021",
+        "tanggal": "17 September 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "klikcair.com",
+      "domain": "klikcair.com",
+      "sistem_operasi": "Android"
+    },
+    {
+      "no": 90,
+      "nama_perusahaan": "PT Ethis Fintek Indonesia",
+      "nama_aplikasi": "ETHIS",
+      "izin": {
+        "nomor": "KEP-104/D.05/2021",
+        "tanggal": "17 September 2021"
+      },
+      "jenis_usaha": "Syariah",
+      "website": "ethis.co.id",
+      "domain": "ethis.co.id",
+      "sistem_operasi": null
+    },
+    {
+      "no": 91,
+      "nama_perusahaan": "PT Sahabat Mikro Fintek",
+      "nama_aplikasi": "SAMIR",
+      "izin": {
+        "nomor": "KEP-105/D.05/2021",
+        "tanggal": "17 September 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "www.samir.co.id",
+      "domain": "samir.co.id",
+      "sistem_operasi": "Android & iOS"
+    },
+    {
+      "no": 92,
+      "nama_perusahaan": "PT Plus Ultra Abadi",
+      "nama_aplikasi": "UATAS",
+      "izin": {
+        "nomor": "KEP-106/D.05/2021",
+        "tanggal": "17 September 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "www.uatas.id",
+      "domain": "uatas.id",
+      "sistem_operasi": "Android"
+    },
+    {
+      "no": 93,
+      "nama_perusahaan": "PT Pintar Inovasi Digital",
+      "nama_aplikasi": "Asetku",
+      "izin": {
+        "nomor": "KEP-123/D.05/2021",
+        "tanggal": "23 Desember 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "www.asetku.co.id",
+      "domain": "asetku.co.id",
+      "sistem_operasi": "Android & iOS"
+    },
+    {
+      "no": 94,
+      "nama_perusahaan": "PT Mapan Global Reksa",
+      "nama_aplikasi": "Findaya",
+      "izin": {
+        "nomor": "KEP-124/D.05/2021",
+        "tanggal": "23 Desember 2021"
+      },
+      "jenis_usaha": "Konvensional",
+      "website": "https://www.findaya.co.id",
+      "domain": "findaya.co.id",
+      "sistem_operasi": "Android & iOS"
+    }
+  ]
+}

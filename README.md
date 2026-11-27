@@ -9,6 +9,7 @@ Live: https://pepktracking.vercel.app (pengunjung) dan https://pepktracking.verc
 | Lokasi | Isi |
 |---|---|
 | `public/index.html` | Halaman publik pengunjung (alamat utama, juga `/layanan`): tombol ke Google Form resmi OJK dan info edukasi. Tanpa login, tidak menyimpan data. Link formulir di variabel `FORMULIR` |
+| `public/data/pindar-berizin.json` | Daftar pindar (LPBBTI) berizin OJK untuk fitur **Cek pinjaman daring** di halaman pengunjung. Disalin dari PDF Direktori LPBBTI di ojk.go.id. Perbarui setiap OJK merilis direktori baru: ganti isi `data`, `per_tanggal`, `jumlah`, dan `sumber`, lalu naikkan versi `CACHE` di `sw.js` |
 | `public/pegawai/index.html` | Aplikasi dasbor pegawai di `/pegawai` (HTML, CSS, JS dalam satu file), wajib login |
 | `public/sw.js` | Service worker untuk cache dan mode offline. Naikkan versi `CACHE` setiap ada perubahan besar |
 | `public/manifest.webmanifest` | Manifest PWA |
